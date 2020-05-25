@@ -35,6 +35,9 @@ public class User {
     @ManyToMany(mappedBy = "voters")
     private Set<Poll> polls = new HashSet<>();
 
+    @ManyToMany(mappedBy = "users")
+    private Set<Team> teams = new HashSet<>();
+
     public User() {}
 
     public User(String username, String email, String password) {
@@ -145,5 +148,13 @@ public class User {
 
     public void setPolls(Set<Poll> polls) {
         this.polls = polls;
+    }
+
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
     }
 }

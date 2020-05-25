@@ -37,6 +37,19 @@ public class BoardController {
         return "success";
     }
 
+    @GetMapping("/addMyBoard")
+    public String addMyBoard(@RequestParam(value = "name") String name, @RequestParam(value = "description") String description, @RequestParam(value = "dod") String dod) {
+        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Board b = new Board(name, description, dod);
+        b.setOwner(user);
+        boardRepository.save(b);
+        BoardRole boardRole = new BoardRole(user, b, "Product Owner");
+        user.getBoardRoles().add(boardRole);
+        b.getBoardRoles().add(boardRole);
+        boardRoleRepository.save(boardRole);
+        return "success";
+    }
+
     @GetMapping("/delete")
     public String delete(@RequestParam(value = "id") Long id) {
         boardRoleRepository.deleteAll(boardRoleRepository.findAllByBoardId(id));

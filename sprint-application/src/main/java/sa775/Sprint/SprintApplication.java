@@ -26,6 +26,8 @@ public class SprintApplication implements CommandLineRunner {
 	private UserRepository userRepository;
 	@Autowired
 	private BoardRoleRepository boardRoleRepository;
+	@Autowired
+	private TeamRepository teamRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SprintApplication.class, args);
@@ -146,6 +148,12 @@ public class SprintApplication implements CommandLineRunner {
 		b.getBoardRoles().add(ba2);
 		seb.getBoardRoles().add(ba2);
 		boardRoleRepository.save(ba2);
+
+		Team team = new Team("Sprint Team", "Team used for developing the Sprint application.");
+		teamRepository.save(team);
+		team.getUsers().add(user);
+		user.getTeams().add(team);
+		teamRepository.save(team);
 
 		System.out.println("Main application has run successfully");
 	}

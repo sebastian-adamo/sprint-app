@@ -43,6 +43,11 @@
     </script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
     <script src="<c:url value="/resources/scripts/main.js"/>"></script>
     <script src="<c:url value="/resources/scripts/account.js"/>"></script>
 </head>
@@ -60,13 +65,19 @@
                         <span>NAVIGATION</span>
                     </li>
                     <li>
-                        <a href="#">
+                        <a onclick="displayDashboard()">
                             <i class="fa fa-home"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a onclick="displayMyBoards()">
+                            <i class="fa fa-th-list"></i>
+                            <span>My Boards</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="displayTeams()">
                             <i class="fa fa-users"></i>
                             <span>Teams</span>
                         </a>
@@ -78,7 +89,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a onclick="displaySettings()">
                             <i class="fa fa-cog"></i>
                             <span>Settings</span>
                         </a>
@@ -152,12 +163,24 @@
         </nav>
         <%--        Main Content--%>
         <div id="content-container" class="container-fluid">
+
+            <!-- Dashboard -->
             <div id="dashboard-row" class="row">
                 <div style="height: 900px" class="col-lg-12">
-                    <div id="board-grid" class="grid">
+                    <div style="padding-top: 56px" id="board-grid" class="grid">
                         <div class="module">
                             <div style="width: 100%; height: 100%" class="card list-card boards-card">
-                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/teams">
+                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayMyBoards()">
+                                    <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
+                                        <p class="card-text"><i class="material-icons">view_list</i></p>
+                                        <p class="card-text">My Boards</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="module">
+                            <div style="width: 100%; height: 100%" class="card list-card boards-card">
+                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayTeams()">
                                     <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
                                         <p class="card-text"><i class="material-icons">group</i></p>
                                         <p class="card-text">Teams</p>
@@ -188,7 +211,88 @@
                     </div>
                 </div>
             </div>
+            <!-- !Dashboard -->
 
+            <!-- MyBoards -->
+            <div style="display: none" id="my-boards-row" class="row">
+                <div style="height: 900px" class="col-lg-12">
+                    <i style="color: #818896; padding: 1rem" class="material-icons" onmouseover="this.style.cursor='pointer';" onclick="displayDashboard()">arrow_back</i>
+                    <div id="my-boards-grid" class="grid">
+                        <c:forEach items="${user.boardRoles}" var="boardRole">
+                            <div class="module">
+                                <div style="width: 100%; height: 100%" class="card list-card boards-card">
+                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/tasks?id=${boardRole.board.id}">
+                                        <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
+                                            <p class="card-text"><i class="material-icons">view_list</i></p>
+                                            <p class="card-text">${boardRole.board.name}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <div class="module">
+                            <div style="width: 100%; height: 100%" class="card list-card boards-card">
+                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="#my-board-modal" rel="modal:open">
+                                    <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
+                                        <p class="card-text"><i class="material-icons">add</i></p>
+                                        <p class="card-text">Create Board</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div style="width: 70%; height: 80%" id="my-board-modal" class="modal">
+                            <form style="padding-top: 1rem !important;" id="create-board-form" class="text-center p-5">
+                                <label for="my-board-name">Name</label>
+                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="my-board-name" class="form-control mb-4" placeholder="Enter a name...">
+                                <div style="margin-top: 8px;" class="form-group">
+                                    <label for="my-board-description">Description</label>
+                                    <textarea class="form-control rounded-0" id="my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                                </div>
+                                <div style="margin-top: 8px;" class="form-group">
+                                    <label for="my-board-dod">Definition of Done</label>
+                                    <textarea class="form-control rounded-0" id="my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
+                                </div>
+                                <button id="cr" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createMyBoard()">Create</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- !MyBoards -->
+
+            <!-- Teams -->
+            <div style="display: none" id="teams-row" class="row">
+                <div style="height: 900px" class="col-lg-12">
+                    <i style="color: #818896; padding: 1rem" class="material-icons" onmouseover="this.style.cursor='pointer';" onclick="displayDashboard()">arrow_back</i>
+                    <div id="team-grid" class="grid">
+                        <c:forEach items="${user.teams}" var="team">
+                            <div class="module">
+                                <div style="width: 100%; height: 100%" class="card list-card boards-card">
+                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayTeams()">
+                                        <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
+                                            <p class="card-text"><i class="material-icons">group</i></p>
+                                            <p class="card-text">${team.name}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <div class="module">
+                            <div style="width: 100%; height: 100%" class="card list-card boards-card">
+                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayTeams()">
+                                    <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
+                                        <p class="card-text"><i class="material-icons">add</i></p>
+                                        <p class="card-text">Create Team</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- !Teams -->
+
+            <!-- Settings -->
             <div style="display: none" id="settings-row" class="row">
                 <div style="height: 900px" class="col-lg-12">
                     <i style="color: #818896; padding: 1rem" class="material-icons" onmouseover="this.style.cursor='pointer';" onclick="displayDashboard()">arrow_back</i>
@@ -234,18 +338,46 @@
                     </div>
                 </div>
             </div>
+            <!-- !Settings -->
+
         </div>
     </main>
 </div>
 </body>
 
 <script>
+    function displayDashboard() {
+        $('#content-container').load(' #dashboard-row > *');
+    }
+
+    function displayMyBoards() {
+        $('#content-container').load(' #my-boards-row > *');
+    }
+
+    function displayTeams() {
+        $('#content-container').load(' #teams-row > *');
+    }
+
     function displaySettings() {
         $('#content-container').load(' #settings-row > *');
     }
 
-    function displayDashboard() {
-        $('#content-container').load(' #dashboard-row > *');
+    function createMyBoard() {
+        var name, description, dod;
+
+        name = $('#my-board-name').val();
+        description = $('#my-board-description').val();
+        dod = $('#my-board-dod').val();
+
+        if (name !== '') {
+            $.ajax({
+                url: "/boards/addMyBoard?name=" + name + "&description=" + description + "&dod=" + dod,
+                success: function(result) {
+                    $('#my-board-modal').modal("hide ");
+                    $('#content-container').load(' #my-boards-row > *');
+                }
+            })
+        }
     }
 </script>
 </html>

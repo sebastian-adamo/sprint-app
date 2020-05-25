@@ -47,6 +47,12 @@ public class Board {
         this.name = name;
     }
 
+    public Board(String name, String description, String definitionOfDone) {
+        this.name = name;
+        this.description = description;
+        this.definitionOfDone = definitionOfDone;
+    }
+
     public Long getId() {
         return id;
     }
