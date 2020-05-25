@@ -1,0 +1,129 @@
+/*Overlay*/
+#task-overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+#task-overlay-view-only{
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+.card-overlay {
+    border-radius: 4px;
+    position: fixed;
+    top: 5%;
+    left: 25%;
+    background-color: white;
+    height: 80%;
+    width: 50%;
+    box-shadow: rgba(0,0,0,0.1) 0 0 10px;
+}
+.card-overlay-contents {
+    margin: 20px;
+    height: 100%;
+}
+.card-overlay-header {
+    margin-bottom: 10px;
+}
+.card-overlay-header-text {
+    font-size: 20px;
+}
+#card-overlay-title {
+    font-size: 20px;
+}
+#card-overlay-title-wrapper {
+    height: 5%;
+    box-shadow: rgba(0,0,0,0.1) 0 0 10px;
+}
+#card-overlay-title-text {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    outline: none;
+    border: 1px solid rgba(0,0,0,.125);
+}
+.card-overlay-icon {
+    font-size: 28px;
+    padding-right: 10px;
+}
+#card-overlay-close-icon {
+    float: right;
+}
+.card-overlay-description {
+    height: 40%;
+    padding-bottom: 10px;
+}
+#card-overlay-description-wrapper {
+    height: 45%;
+    box-shadow: rgba(0,0,0,0.1) 0 0 10px;
+}
+#card-overlay-description-text {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    outline: none;
+    border: 1px solid rgba(0,0,0,.125);
+}
+#card-overlay-activity-wrapper {
+    height: 30%;
+    box-shadow: rgba(0,0,0,0.1) 0 0 10px;
+}
+#card-overlay-activity-text {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    outline: none;
+    border: 1px solid rgba(0,0,0,.125);
+}
+.card-overlay-activity {
+    display: block;
+    height: 20%;
+}
+#task-description {
+    width: 80%;
+    height: 100px;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    border: none;
+    border-radius: 4px;
+    resize: none;
+    font-size: medium;
+    font-weight: normal;
+}
+.card-overlay-footer-wrapper {
+    margin-top: 10%;
+    align-content: center;
+}
+
+.progress-bar {
+    background-color: #31353D !important;
+}
+
+.custom-control-label::before {
+    background-color: #31353D !important;
+    border-color: #31353D !important;
+}
+
+#poll-view-results:hover {
+    cursor: pointer;
+}

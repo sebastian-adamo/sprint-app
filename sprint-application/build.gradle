@@ -1,0 +1,43 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'sa775.sprint'
+version = '0.0.1'
+sourceCompatibility = '1.8'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtime 'mysql:mysql-connector-java:8.0.19'
+	compile 'javax.servlet:jstl:1.2'
+	compile 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.10'
+	compile 'javax.xml.bind:jaxb-api:2.3.0'
+	compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.2.1.RELEASE'
+	compile group: 'org.webjars', name: 'bootstrap', version: '3.2.0'
+	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testCompile group: 'junit', name: 'junit', version: '4.13'
+	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.6.RELEASE'
+	testCompile group: 'org.testng', name: 'testng', version: '7.1.0'
+}
+
+test {
+	useJUnitPlatform()
+}

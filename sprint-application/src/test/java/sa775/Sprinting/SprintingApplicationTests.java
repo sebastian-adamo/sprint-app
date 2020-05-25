@@ -1,0 +1,15 @@
+package sa775.Sprinting;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+//@SpringBootTest
+//class SprintingApplicationTests {
+//
+//	@Test
+//	void contextLoads() {
+//	}
+//
+//	// https://www.testcontainers.org/
+//
+//}
