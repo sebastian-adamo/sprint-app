@@ -24,10 +24,11 @@ public class BoardController {
     @Autowired
     private NotificationService notificationService;
 
-    @GetMapping("/add")
-    public String add(@RequestParam(value = "name") String name) {
+    //My Board Methods
+    @GetMapping("/addMyBoard")
+    public String addMyBoard(@RequestParam(value = "name") String name, @RequestParam(value = "description") String description, @RequestParam(value = "dod") String dod) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board b = new Board(name);
+        Board b = new Board(name, description, dod);
         b.setOwner(user);
         boardRepository.save(b);
         BoardRole boardRole = new BoardRole(user, b, "Product Owner");
@@ -37,10 +38,23 @@ public class BoardController {
         return "success";
     }
 
-    @GetMapping("/addMyBoard")
-    public String addMyBoard(@RequestParam(value = "name") String name, @RequestParam(value = "description") String description, @RequestParam(value = "dod") String dod) {
+    @GetMapping("/getMyBoard")
+    public HashMap<String, Object> getMyBoard(@RequestParam(value = "id") Long id) {
+        Board board = boardRepository.findById(id);
+        HashMap<String, Object> returnMap = new HashMap<>();
+
+        returnMap.put("name", board.getName());
+        returnMap.put("description", board.getDescription());
+        returnMap.put("dod", board.getDefinitionOfDone());
+
+        return returnMap;
+    }
+    //!My Board Methods
+
+    @GetMapping("/add")
+    public String add(@RequestParam(value = "name") String name) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board b = new Board(name, description, dod);
+        Board b = new Board(name);
         b.setOwner(user);
         boardRepository.save(b);
         BoardRole boardRole = new BoardRole(user, b, "Product Owner");
@@ -118,7 +132,6 @@ public class BoardController {
 
         return "success";
     }
-
 
     @GetMapping("/users/search")
     public String searchUser(@RequestParam(value = "email") String email) {

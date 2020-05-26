@@ -24,6 +24,11 @@ small {
     color: #b8bfce;
 }
 
+.card-footer > .material-icons:hover {
+    cursor: pointer;
+    opacity: .9;
+}
+
 .jumbotron {
     background-color: white !important;
 }

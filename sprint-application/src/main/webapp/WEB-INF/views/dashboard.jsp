@@ -217,19 +217,40 @@
             <div style="display: none" id="my-boards-row" class="row">
                 <div style="height: 900px" class="col-lg-12">
                     <i style="color: #818896; padding: 1rem" class="material-icons" onmouseover="this.style.cursor='pointer';" onclick="displayDashboard()">arrow_back</i>
+
                     <div id="my-boards-grid" class="grid">
                         <c:forEach items="${user.boardRoles}" var="boardRole">
                             <div class="module">
                                 <div style="width: 100%; height: 100%" class="card list-card boards-card">
                                     <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/tasks?id=${boardRole.board.id}">
-                                        <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
-                                            <p class="card-text"><i class="material-icons">view_list</i></p>
+                                        <div style="height: 75%; text-align: center; padding-top: 30%" class="card-body">
                                             <p class="card-text">${boardRole.board.name}</p>
                                         </div>
                                     </a>
+                                    <div class="card-footer">
+                                        <a class="material-icons" style="text-decoration: none; color: black" href="#edit-my-board-modal" rel="modal:open" onclick="getMyBoard('${boardRole.board.id}')"><i class="material-icons">create</i></a>
+                                        <i class="material-icons" onclick="deleteMyBoard('${boardRole.board.id}')">delete_outline</i>
+                                    </div>
                                 </div>
                             </div>
                         </c:forEach>
+                        <div style="width: 70%; height: 80%" id="edit-my-board-modal" class="modal">
+                            <form style="padding-top: 1rem !important;" id="edit-board-form" class="text-center p-5">
+                                <label for="edit-my-board-name">Name</label>
+                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="edit-my-board-name" class="form-control mb-4" placeholder="Enter a name...">
+                                <div style="margin-top: 8px;" class="form-group">
+                                    <label for="edit-my-board-description">Description</label>
+                                    <textarea class="form-control rounded-0" id="edit-my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                                </div>
+                                <div style="margin-top: 8px;" class="form-group">
+                                    <label for="edit-my-board-dod">Definition of Done</label>
+                                    <textarea class="form-control rounded-0" id="edit-my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
+                                </div>
+                                <button id="save-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="saveMyBoard()">Save</button>
+                            </form>
+                        </div>
+
+                        <!-- Create Board -->
                         <div class="module">
                             <div style="width: 100%; height: 100%" class="card list-card boards-card">
                                 <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="#my-board-modal" rel="modal:open">
@@ -241,9 +262,10 @@
                             </div>
                         </div>
                         <div style="width: 70%; height: 80%" id="my-board-modal" class="modal">
+                            <input id="my-board-id" style="display: none">
                             <form style="padding-top: 1rem !important;" id="create-board-form" class="text-center p-5">
                                 <label for="my-board-name">Name</label>
-                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="my-board-name" class="form-control mb-4" placeholder="Enter a name...">
+                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="my-board-name" class="form-control mb-4" placeholder="Enter a name..." required>
                                 <div style="margin-top: 8px;" class="form-group">
                                     <label for="my-board-description">Description</label>
                                     <textarea class="form-control rounded-0" id="my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
@@ -252,9 +274,10 @@
                                     <label for="my-board-dod">Definition of Done</label>
                                     <textarea class="form-control rounded-0" id="my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
                                 </div>
-                                <button id="cr" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createMyBoard()">Create</button>
+                                <button id="create-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createMyBoard()">Create</button>
                             </form>
                         </div>
+                        <!-- !Create Board -->
                     </div>
                 </div>
             </div>
@@ -277,9 +300,11 @@
                                 </div>
                             </div>
                         </c:forEach>
+
+                        <!-- Create Team -->
                         <div class="module">
                             <div style="width: 100%; height: 100%" class="card list-card boards-card">
-                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayTeams()">
+                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="#create-team-modal" rel="modal:open">
                                     <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
                                         <p class="card-text"><i class="material-icons">add</i></p>
                                         <p class="card-text">Create Team</p>
@@ -287,6 +312,19 @@
                                 </a>
                             </div>
                         </div>
+                        <div style="width: 70%; height: 80%" id="create-team-modal" class="modal">
+                            <form style="padding-top: 1rem !important;" id="create-team-form" class="text-center p-5">
+                                <label for="create-team-name">Name</label>
+                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="create-team-name" class="form-control mb-4" placeholder="Enter a team name..." required>
+                                <div style="margin-top: 8px;" class="form-group">
+                                    <label for="create-team-description">Description</label>
+                                    <textarea class="form-control rounded-0" id="create-team-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                                </div>
+                                <button id="create-team" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createTeam()">Create</button>
+                            </form>
+                        </div>
+                        <!-- !Create Team -->
+
                     </div>
                 </div>
             </div>
@@ -374,6 +412,45 @@
                 url: "/boards/addMyBoard?name=" + name + "&description=" + description + "&dod=" + dod,
                 success: function(result) {
                     $('#my-board-modal').modal("hide ");
+                    $('#content-container').load(' #my-boards-row > *');
+                }
+            })
+        }
+    }
+
+    function deleteMyBoard(id) {
+        $.ajax({
+            url: "/boards/delete?id=" + id,
+            success: function(result) {
+                $('#content-container').load(' #my-boards-row > *');
+            }
+        })
+    }
+
+    function getMyBoard(id) {
+        $.ajax({
+            url: "/boards/getMyBoard?id=" + id,
+            success: function(result) {
+                $('#my-board-id').val(id);
+                $('#edit-my-board-name').val(result.name);
+                $('#edit-my-board-description').val(result.description);
+                $('#edit-my-board-dod').val(result.dod);
+            }
+        })
+    }
+
+    function saveMyBoard() {
+        let id, name, description, dod;
+
+        id = $('#my-board-id').val();
+        name = $('#edit-my-board-name').val();
+        description = $('#edit-my-board-description').val();
+        dod = $('#edit-my-board-dod').val();
+
+        if (name !== '') {
+            $.ajax({
+                url: "/boards/save?id= " + id + "&name=" + name + "&description=" + description + "&dod=" + dod,
+                success: function(result) {
                     $('#content-container').load(' #my-boards-row > *');
                 }
             })
