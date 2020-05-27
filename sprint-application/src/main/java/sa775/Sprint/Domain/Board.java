@@ -13,6 +13,8 @@ public class Board {
     private String description;
     private String definitionOfDone;
 
+    private Date created = new Date();
+
     @OneToMany(cascade = CascadeType.ALL)
     @OrderBy("position ASC")
     private List<Task> backlog = new ArrayList<>();
@@ -83,6 +85,14 @@ public class Board {
 
     public void setDefinitionOfDone(String definitionOfDone) {
         this.definitionOfDone = definitionOfDone;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public void addBacklog(Task task) {

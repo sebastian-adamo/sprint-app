@@ -100,7 +100,7 @@
     <main class="page-content">
         <nav id="navbar" class="navbar navbar-expand-sm bg-dark navbar-dark">
             <!-- Sidebar -->
-            <a style="padding-top: 25px;" id="logo" class="navbar-brand" href="${pageContext.request.contextPath}/boards"><img src="<c:url value="/resources/images/logo.svg"/>" style="width: 120px; height: 60px;" alt="logo"/></a>
+            <a style="padding-top: 25px;" id="logo" class="navbar-brand" href="${pageContext.request.contextPath}/dashboard"><img src="<c:url value="/resources/images/logo.svg"/>" style="width: 120px; height: 60px;" alt="logo"/></a>
             <!-- Links -->
             <ul class="navbar-nav">
                 <!-- Home -->
@@ -108,7 +108,7 @@
                     <a id="show-sidebar" class="nav-link" href="#" onclick="toggleSidebar()"><i class="material-icons">menu</i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/boards"><i class="material-icons">home</i></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/dashboard"><i class="material-icons">home</i></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="#" id="navbardrop" data-toggle="dropdown">
@@ -454,7 +454,7 @@
                     </div>
                     <div class="tab-content" id="task-overlay-tab-content">
                         <div class="tab-pane fade show active" id="task-details" role="tabpanel" aria-labelledby="task-details-tab">
-                            <div class="friends-overlay-list-container">
+                            <div class="form-container">
                                 <div id="card-overlay-taskid" style="display: none;"></div>
                                 <form style="padding-top: 0 !important;" class="text-center p-5">
                                     <label for="task-overlay-name">Name</label>
@@ -504,7 +504,7 @@
                     </div>
                     <div class="tab-content" id="task-overlay-vo-tab-content">
                         <div class="tab-pane fade show active" id="task-vo-details" role="tabpanel" aria-labelledby="task-vo-details-tab">
-                            <div class="friends-overlay-list-container">
+                            <div class="form-container">
                                 <div id="card-overlay-vo-taskid" style="display: none;"></div>
                                 <form style="padding-top: 0 !important;" class="text-center p-5">
                                     <label for="task-overlay-vo-name">Name</label>
@@ -550,7 +550,7 @@
             <div class="row">
                 <div style="height: 900px"  class="col-lg-6">
                     <div class="lists" id="polls-list-wrapper">
-                        <div class="friends-overlay-list-container">
+                        <div class="form-container">
                             <div style="margin-bottom: 0; padding-bottom: 0" class="jumbotron jumbotron-fluid">
                                 <div class="container">
                                     <h1 class="display-4">View Polls</h1>
@@ -586,7 +586,7 @@
                 </div>
                 <div style="height: 900px"  class="col-lg-6">
                     <div class="lists" id="create-polls-wrapper">
-                        <div class="friends-overlay-list-container">
+                        <div class="form-container">
                             <div style="margin-bottom: 0; padding-bottom: 0" class="jumbotron jumbotron-fluid">
                                 <div class="container">
                                     <h1 class="display-4">Create a Poll</h1>
@@ -668,7 +668,7 @@
             <div class="row">
                 <div style="height: 900px"  class="col-lg-12">
                     <div class="lists" id="document-list-wrapper">
-                        <div class="friends-overlay-list-container">
+                        <div class="form-container">
                             <div style="margin-bottom: 0; padding-bottom: 0" class="jumbotron jumbotron-fluid">
                                 <div class="container">
                                     <h1 class="display-4">Documents</h1>

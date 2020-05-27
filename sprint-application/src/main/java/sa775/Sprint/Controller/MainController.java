@@ -57,36 +57,11 @@ public class MainController {
             }
         }
 
-
         model.addAttribute("user", user);
         model.addAttribute("notifications", notifications);
         model.addAttribute("notificationsLength", notificationsLength);
 
         return "dashboard";
-    }
-
-    @GetMapping("/boards")
-    public String boards(Model model) {
-        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<BoardRole> boardRoles = boardRoleRepository.findAllByUserId(user.getId());
-
-        // Notifications
-        List<Notification> notifications = new ArrayList<>(user.getNotifications());
-        notifications.sort(Comparator.comparing(Notification::getDatetime).reversed());
-        //Length
-        int notificationsLength = 0;
-        for (Notification notification : user.getNotifications()) {
-            if (!notification.isSeen()) {
-                notificationsLength++;
-            }
-        }
-
-        model.addAttribute("user", user);
-        model.addAttribute("boardRoles", boardRoles);
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("notificationsLength", notificationsLength);
-
-        return "boards";
     }
 
     @GetMapping("/tasks")

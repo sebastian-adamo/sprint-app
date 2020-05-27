@@ -150,7 +150,7 @@
                     </ul>
                     <div class="tab-content" id="account-overlay-tab-content">
                         <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-                            <div class="friends-overlay-list-container">
+                            <div class="form-container">
                                 <form id="account-form" class="text-center p-5">
                                     <div id="account-image-wrapper" class="text-center">
                                         <c:choose>
@@ -183,7 +183,7 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab" >
-                            <div class="friends-overlay-list-container">
+                            <div class="form-container">
                                 <form class="text-center p-5">
                                     <label for="account-new-password">New Password</label>
                                     <input style="margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="password" id="account-new-password" class="form-control mb-4" placeholder="Enter new password...">

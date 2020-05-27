@@ -19,37 +19,40 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
     <link type="text/css" href="../../../resources/style/theme.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 
+    <!-- jQuery -->
     <script
             src="https://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
             crossorigin="anonymous">
     </script>
+    <!-- jQuery UI -->
     <script
             src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
             integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
             crossorigin="anonymous">
     </script>
+    <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous">
-
     </script>
+    <!-- Bootstrap -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous">
     </script>
-    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 
     <!-- jQuery Modal -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
 
     <script src="<c:url value="/resources/scripts/main.js"/>"></script>
     <script src="<c:url value="/resources/scripts/account.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/my-boards.js"/>"></script>
 </head>
 <body>
 <div class="page-wrapper chiller-theme">
@@ -190,7 +193,7 @@
                         </div>
                         <div class="module">
                             <div style="width: 100%; height: 100%" class="card list-card boards-card">
-                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/teams">
+                                <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayCalendar()">
                                     <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
                                         <p class="card-text"><i class="material-icons">calendar_today</i></p>
                                         <p class="card-text">Calendar</p>
@@ -234,7 +237,7 @@
                                 </div>
                             </div>
                         </c:forEach>
-                        <div style="width: 70%; height: 80%" id="edit-my-board-modal" class="modal">
+                        <div style="width: 70%; height: 60%" id="edit-my-board-modal" class="modal">
                             <form style="padding-top: 1rem !important;" id="edit-board-form" class="text-center p-5">
                                 <label for="edit-my-board-name">Name</label>
                                 <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="edit-my-board-name" class="form-control mb-4" placeholder="Enter a name...">
@@ -261,11 +264,11 @@
                                 </a>
                             </div>
                         </div>
-                        <div style="width: 70%; height: 80%" id="my-board-modal" class="modal">
+                        <div style="width: 70%; height: 60%" id="my-board-modal" class="modal">
                             <input id="my-board-id" style="display: none">
                             <form style="padding-top: 1rem !important;" id="create-board-form" class="text-center p-5">
                                 <label for="my-board-name">Name</label>
-                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="my-board-name" class="form-control mb-4" placeholder="Enter a name..." required>
+                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="my-board-name" class="form-control mb-4" placeholder="Enter a name...">
                                 <div style="margin-top: 8px;" class="form-group">
                                     <label for="my-board-description">Description</label>
                                     <textarea class="form-control rounded-0" id="my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
@@ -291,7 +294,7 @@
                         <c:forEach items="${user.teams}" var="team">
                             <div class="module">
                                 <div style="width: 100%; height: 100%" class="card list-card boards-card">
-                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayTeams()">
+                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayTeamDetails('${team.id}')">
                                         <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
                                             <p class="card-text"><i class="material-icons">group</i></p>
                                             <p class="card-text">${team.name}</p>
@@ -312,7 +315,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div style="width: 70%; height: 80%" id="create-team-modal" class="modal">
+                        <div style="width: 70%; height: 60%" id="create-team-modal" class="modal">
                             <form style="padding-top: 1rem !important;" id="create-team-form" class="text-center p-5">
                                 <label for="create-team-name">Name</label>
                                 <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="create-team-name" class="form-control mb-4" placeholder="Enter a team name..." required>
@@ -324,11 +327,102 @@
                             </form>
                         </div>
                         <!-- !Create Team -->
-
                     </div>
                 </div>
             </div>
             <!-- !Teams -->
+
+            <!-- Team Details -->
+            <div style="display: none" id="team-details-row" class="row">
+                <div style="height: 900px" class="col-lg-12">
+                    <i style="color: #818896; padding: 1rem" class="material-icons" onmouseover="this.style.cursor='pointer';" onclick="displayTeams()">arrow_back</i>
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="team-boards-tab" data-toggle="tab" href="#team-boards" role="tab" aria-controls="home" aria-selected="true"><i class="material-icons">view_list</i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a onclick="getTeamDetails()" class="nav-link" id="team-details-tab" data-toggle="tab" href="#team-details" role="tab" aria-controls="profile" aria-selected="false"><i class="material-icons">description</i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a onclick="getTeamMembers()" class="nav-link" id="team-members-tab" data-toggle="tab" href="#team-members" role="tab" aria-controls="profile" aria-selected="false"><i class="material-icons">group_add</i></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- Team Boards -->
+                        <div class="tab-pane fade show active" id="team-boards" role="tabpanel" aria-labelledby="team-boards-tab">
+                            <div style="padding-top: 2rem" id="team-boards-grid" class="grid">
+                                <!-- Team Boards Prepended Here -->
+                                <!-- Create Team Board -->
+                                <div class="module">
+                                    <div style="width: 100%; height: 100%" class="card list-card boards-card">
+                                        <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="#create-team-board-modal" rel="modal:open">
+                                            <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
+                                                <p class="card-text"><i class="material-icons">add</i></p>
+                                                <p class="card-text">Create Board</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div style="width: 70%; height: 60%" id="create-team-board-modal" class="modal">
+                                    <form style="padding-top: 1rem !important;" id="create-team-board-form" class="text-center p-5">
+                                        <label for="create-team-board-name">Name</label>
+                                        <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="create-team-board-name" class="form-control mb-4" placeholder="Enter a name...">
+                                        <div style="margin-top: 8px;" class="form-group">
+                                            <label for="create-team-board-description">Description</label>
+                                            <textarea class="form-control rounded-0" id="create-team-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                                        </div>
+                                        <div style="margin-top: 8px;" class="form-group">
+                                            <label for="create-team-board-dod">Definition of Done</label>
+                                            <textarea class="form-control rounded-0" id="create-team-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
+                                        </div>
+                                        <button id="create-team-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createTeamBoard()">Create</button>
+                                    </form>
+                                </div>
+                                <!-- !Create Team Board -->
+                            </div>
+                        </div>
+                        <!-- !Team Boards -->
+                        <!-- Team Details -->
+                        <div class="tab-pane fade" id="team-details" role="tabpanel" aria-labelledby="team-details-tab" >
+                            <div class="form-container">
+                                <form class="text-center p-5">
+                                    <label for="team-name">Team Name</label>
+                                    <input style="margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="team-name" class="form-control mb-4" readonly>
+                                    <div style="margin-top: 8px;" class="form-group">
+                                        <label for="team-description">Team description</label>
+                                        <textarea class="form-control rounded-0" id="team-description" rows="5" name="description" placeholder="Enter a description..."></textarea>
+                                    </div>
+                                    <button style="background: #31353D; border-color: #31353D; margin-bottom: 2rem" class="btn btn-info btn-block" type="button" onclick="saveTeamDetails()">Save</button>
+                                    <hr/>
+                                    <button style="margin-top: 2rem" class="btn btn-info btn-block btn-danger" type="button" onclick="deleteTeam()">Delete Team</button>
+                                </form>
+
+                            </div>
+                        </div>
+                        <!-- !Team Details -->
+                        <!-- Team Members -->
+                        <div class="tab-pane fade" id="team-members" role="tabpanel" aria-labelledby="team-members-tab" >
+                            <div class="form-container">
+                                <table style="width: 80%; margin-left: 7.5%" class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Username</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="team-members-table">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- !Team Members -->
+                    </div>
+                </div>
+            </div>
+            <!-- !Team Details -->
 
             <!-- Settings -->
             <div style="display: none" id="settings-row" class="row">
@@ -344,7 +438,7 @@
                     </ul>
                     <div class="tab-content" id="account-overlay-tab-content">
                         <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-                            <div class="friends-overlay-list-container">
+                            <div class="form-container">
                                 <form id="account-form" class="text-center p-5">
                                     <label for="account-username">Username</label>
                                     <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="account-username" class="form-control mb-4" value="${user.username}" readonly>
@@ -363,7 +457,7 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab" >
-                            <div class="friends-overlay-list-container">
+                            <div class="form-container">
                                 <form class="text-center p-5">
                                     <label for="account-new-password">New Password</label>
                                     <input style="margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="password" id="account-new-password" class="form-control mb-4" placeholder="Enter new password...">
@@ -396,65 +490,144 @@
         $('#content-container').load(' #teams-row > *');
     }
 
+    let teamId;
+
+    function displayTeamDetails(id) {
+        teamId = id;
+        getTeamBoards();
+        $('#content-container').load(' #team-details-row > *');
+    }
+
     function displaySettings() {
         $('#content-container').load(' #settings-row > *');
     }
 
-    function createMyBoard() {
+    function createTeam() {
+        let name, description;
+
+        name = $('#create-team-name').val();
+        description = $('#create-team-description').val();
+
+
+        if (name !== '') {
+            $.ajax({
+                url: "/team/create?name=" + name + "&description=" + description,
+                success: function() {
+                    $('#content-container').load(' #teams-row > *');
+                    $('.close-modal').trigger('click');
+                }
+            })
+        }
+    }
+
+    function getTeamBoards() {
+        $.ajax({
+            url: "/team/getBoards?id=" + teamId,
+            success: function(result) {
+                $('#team-boards-grid').empty();
+                for (let i = 0; i < result.length; i++) {
+                    $('#team-boards-grid').prepend(
+                        '<div class="module">\n' +
+                            '<div style="width: 100%; height: 100%" class="card list-card boards-card">\n' +
+                                '<a href="/tasks?id=' + result[i].id + '" style="text-decoration: none; color: #0f0f0f; display: block; height: 100%">\n' +
+                                    '<div style="height: 75%; text-align: center; padding-top: 30%" class="card-body">\n' +
+                                        '<p class="card-text">' + result[i].name + '</p>\n' +
+                                    '</div>\n' +
+                                '</a>\n' +
+                                '<div class="card-footer">\n' +
+                                '<a class="material-icons" style="text-decoration: none; color: black" href="#edit-my-board-modal" rel="modal:open"><i class="material-icons">create</i></a>\n' +
+                                '<i class="material-icons" onclick="deleteTeamBoard(\'' + result[i].id + '\')">delete_outline</i>\n' +
+                                '</div>\n' +
+                            '</div>\n' +
+                        '</div>'
+                    );
+                }
+            }
+        })
+    }
+
+    function createTeamBoard() {
         var name, description, dod;
 
-        name = $('#my-board-name').val();
-        description = $('#my-board-description').val();
-        dod = $('#my-board-dod').val();
+        name = $('#create-team-board-name').val();
+        description = $('#create-team-board-description').val();
+        dod = $('#create-team-board-dod').val();
 
         if (name !== '') {
             $.ajax({
-                url: "/boards/addMyBoard?name=" + name + "&description=" + description + "&dod=" + dod,
-                success: function(result) {
-                    $('#my-board-modal').modal("hide ");
-                    $('#content-container').load(' #my-boards-row > *');
+                url: "/team/createBoard?id=" + teamId +  "&name=" + name + "&description=" + description + "&dod=" + dod,
+                success: function() {
+                    getTeamBoards();
+                    $('.close-modal').trigger('click');
                 }
             })
         }
+        else {
+            // Change
+            alert("Please enter a board name.")
+        }
     }
 
-    function deleteMyBoard(id) {
+    function deleteTeamBoard(id) {
         $.ajax({
-            url: "/boards/delete?id=" + id,
-            success: function(result) {
-                $('#content-container').load(' #my-boards-row > *');
+            url: "/team/deleteBoard?id=" + id,
+            success: function() {
+                alert("Deleted")
             }
         })
     }
 
-    function getMyBoard(id) {
+    function getTeamDetails() {
         $.ajax({
-            url: "/boards/getMyBoard?id=" + id,
+            url: "/team/getDetails?id=" + teamId,
             success: function(result) {
-                $('#my-board-id').val(id);
-                $('#edit-my-board-name').val(result.name);
-                $('#edit-my-board-description').val(result.description);
-                $('#edit-my-board-dod').val(result.dod);
+                $('#team-name').val(result.name);
+                $('#team-description').val(result.description);
             }
         })
     }
 
-    function saveMyBoard() {
-        let id, name, description, dod;
+    function saveTeamDetails() {
+        let name, description;
 
-        id = $('#my-board-id').val();
-        name = $('#edit-my-board-name').val();
-        description = $('#edit-my-board-description').val();
-        dod = $('#edit-my-board-dod').val();
+        name = $('#team-name').val();
+        description = $('#team-description').val();
 
-        if (name !== '') {
-            $.ajax({
-                url: "/boards/save?id= " + id + "&name=" + name + "&description=" + description + "&dod=" + dod,
-                success: function(result) {
-                    $('#content-container').load(' #my-boards-row > *');
+        $.ajax({
+            url: "/team/saveDetails?id=" + teamId + "&name=" + name + "&description=" + description,
+            success: function() {
+                alert("Team details have been saved.")
+            }
+        })
+    }
+
+    function getTeamMembers() {
+        $.ajax({
+            url: "/team/getMembers?id=" + teamId,
+            success: function(result) {
+                $('#team-members-table').empty();
+                for (let i = 0; i < result.length; i++) {
+                    $('#team-members-table').append(
+                        '<tr>' +
+                            '<th scope="row">Pic</th>' +
+                            '<td>' + result[i].name + '</td>' +
+                            '<td>' + result[i].username + '</td>' +
+                            '<td>Active</td>' +
+                        '</tr>'
+                    );
                 }
-            })
-        }
+            }
+        })
+
+    }
+
+    function deleteTeam() {
+        $.ajax({
+            url: "/team/delete?id=" + teamId ,
+            success: function() {
+                $('#content-container').load(' #teams-row > *');
+            }
+        })
     }
 </script>
 </html>

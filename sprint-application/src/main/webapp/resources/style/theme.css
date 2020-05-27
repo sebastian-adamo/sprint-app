@@ -33,6 +33,26 @@ small {
     background-color: white !important;
 }
 
+.close-modal {
+    top: 10px !important;
+    right: 10px !important;
+    width: 25px !important;
+    height: 25px !important;
+    background-image: url("../../../resources/images/close-modal.svg") !important;
+}
+
+.close-modal:hover {
+    opacity: .9 !important;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+
 /*Index*/
 #index-jumbotron {
     height: 163px;
@@ -49,7 +69,7 @@ small {
     color: #676767;
     background-color: white;
     width: 40%;
-    height: 55%;
+    height: 57.5%;
     margin: 15% auto 20px;
     box-shadow: rgba(0,0,0,0.1) 0 0 10px;
 }
@@ -328,7 +348,7 @@ small {
 .nav-item > a {
     color: inherit;
 }
-.friends-overlay-list-container {
+.form-container {
     text-align: center;
     padding: 20px;
     height: 100%;
