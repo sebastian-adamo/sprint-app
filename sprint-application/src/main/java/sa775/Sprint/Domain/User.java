@@ -1,9 +1,10 @@
 package sa775.Sprint.Domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
 
 @Entity
 public class User {
@@ -21,22 +22,18 @@ public class User {
     private String company;
     private String bio;
     private Long currentBoardId;
-    private boolean profileImage = false;
 
-    @Lob
-    private byte[] image;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Board> myBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<BoardRole> boardRoles = new HashSet<>();
+    private Set<TeamRole> teamRoles = new HashSet<>();
 
     @ManyToMany(mappedBy = "users")
     private Set<Notification> notifications = new HashSet<>();
 
     @ManyToMany(mappedBy = "voters")
     private Set<Poll> polls = new HashSet<>();
-
-    @ManyToMany(mappedBy = "users")
-    private Set<Team> teams = new HashSet<>();
 
     public User() {}
 
@@ -110,28 +107,20 @@ public class User {
         this.currentBoardId = currentBoardId;
     }
 
-    public boolean isProfileImage() {
-        return profileImage;
+    public List<Board> getMyBoards() {
+        return myBoards;
     }
 
-    public void setProfileImage(boolean profileImage) {
-        this.profileImage = profileImage;
+    public void setMyBoards(List<Board> myBoards) {
+        this.myBoards = myBoards;
     }
 
-    public byte[] getImage() {
-        return image;
+    public Set<TeamRole> getTeamRoles() {
+        return teamRoles;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public Set<BoardRole> getBoardRoles() {
-        return boardRoles;
-    }
-
-    public void setBoardRoles(Set<BoardRole> boardRoles) {
-        this.boardRoles = boardRoles;
+    public void setTeamRoles(Set<TeamRole> teamRoles) {
+        this.teamRoles = teamRoles;
     }
 
     public Set<Notification> getNotifications() {
@@ -150,11 +139,4 @@ public class User {
         this.polls = polls;
     }
 
-    public Set<Team> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(Set<Team> teams) {
-        this.teams = teams;
-    }
 }

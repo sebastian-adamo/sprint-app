@@ -3,17 +3,10 @@ package sa775.Sprint.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import sa775.Sprint.Domain.BoardRole;
-import sa775.Sprint.Domain.Notification;
 import sa775.Sprint.Domain.User;
-import sa775.Sprint.Repository.NotificationRepository;
 import sa775.Sprint.Repository.UserRepository;
 import sa775.Sprint.Service.NotificationService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/account")

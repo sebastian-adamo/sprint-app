@@ -14,13 +14,13 @@ public class TaskControllerTests {
 
     private User user;
     private Board board;
-    private BoardRole boardRole;
+    private TeamRole boardRole;
 
     @Before
     public void setup() {
         user = new User("admin", "admin@sprint.com", "admin");
         board = new Board("Test Board");
-        boardRole = new BoardRole(user, board, "Product Owner");
+        boardRole = new TeamRole(user, board, "Product Owner");
         board.setOwner(user);
         // Mock TODO List
         board.getBacklog().add(new Task("Task 0", "Task 0", false, false, 0));

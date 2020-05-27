@@ -7,8 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sa775.Sprint.Domain.*;
 import sa775.Sprint.Repository.BoardRepository;
-import sa775.Sprint.Repository.BoardRoleRepository;
-import sa775.Sprint.Repository.PollRepository;
+import sa775.Sprint.Repository.TeamRoleRepository;
 import sa775.Sprint.Repository.UserRepository;
 
 import java.util.*;
@@ -19,7 +18,7 @@ public class MainController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private BoardRoleRepository boardRoleRepository;
+    private TeamRoleRepository boardRoleRepository;
     @Autowired
     private BoardRepository boardRepository;
 
@@ -45,6 +44,9 @@ public class MainController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        user.getMyBoards().sort(Comparator.comparing(Board::getCreated));
+
+        model.addAttribute("user", user);
 
         // Notifications
         List<Notification> notifications = new ArrayList<>(user.getNotifications());
@@ -56,8 +58,6 @@ public class MainController {
                 notificationsLength++;
             }
         }
-
-        model.addAttribute("user", user);
         model.addAttribute("notifications", notifications);
         model.addAttribute("notificationsLength", notificationsLength);
 
@@ -69,16 +69,6 @@ public class MainController {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         user.setCurrentBoardId(id);
         userRepository.save(user);
-
-        List<Board> boards = new ArrayList<>();
-        for (BoardRole boardRole: boardRoleRepository.findAllByUserId(user.getId())) {
-            boards.add(boardRole.getBoard());
-        }
-
-        boardRepository.findById(id).getComments().sort(Comparator.comparing(Comment::getDatetime));
-
-        List<BoardRole> boardRoles = boardRoleRepository.findAllByBoardId(id);
-        Collections.reverse(boardRoles);
 
         // Notifications
         List<Notification> notifications = new ArrayList<>(user.getNotifications());
@@ -93,9 +83,6 @@ public class MainController {
 
         model.addAttribute("user", user);
         model.addAttribute("board", boardRepository.findById(id));
-        model.addAttribute("boardRole", boardRoleRepository.findByUserAndBoard(user, boardRepository.findById(id)));
-        model.addAttribute("boardRoles", boardRoles);
-        model.addAttribute("boards", boards);
         model.addAttribute("notifications", notifications);
         model.addAttribute("notificationsLength", notificationsLength);
 
@@ -107,7 +94,6 @@ public class MainController {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         model.addAttribute("user", user);
-        model.addAttribute("boardRoles", boardRoleRepository.findAllByUserId(user.getId()));
 
         // Notifications
         List<Notification> notifications = new ArrayList<>(user.getNotifications());

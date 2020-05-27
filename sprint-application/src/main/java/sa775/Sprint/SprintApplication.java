@@ -1,20 +1,13 @@
 package sa775.Sprint;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import sa775.Sprint.Domain.*;
 import sa775.Sprint.Repository.*;
-import sa775.Sprint.Service.NotificationService;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @SpringBootApplication
 // public class SprintApplication extends SpringBootServletInitializer implements CommandLineRunner {
@@ -25,7 +18,7 @@ public class SprintApplication implements CommandLineRunner {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private BoardRoleRepository boardRoleRepository;
+	private TeamRoleRepository teamRoleRepository;
 	@Autowired
 	private TeamRepository teamRepository;
 
@@ -51,9 +44,7 @@ public class SprintApplication implements CommandLineRunner {
 		User joe = new User("joe147258", "joe147258@sprint.com", encoder.encode("joe"));
 
 		// Creating Board
-		Board b = new Board("Dissertation Software");
-		b.setDescription("Kanban board assisting in Dissertation project.");
-		b.setDefinitionOfDone("Code Reviewed, Functionality Confirmed, Usability Tests Passed");
+		Board b = new Board("Dissertation Software", "Kanban board assisting in Dissertation project.", "Code Reviewed, Functionality Confirmed, Usability Tests Passed");
 
 		// Creating Tasks and Adding them to the board
 		Task tb = new Task("Password Recovery", "Functioning password recovery system via e-mail", false, false, 0);
@@ -112,12 +103,6 @@ public class SprintApplication implements CommandLineRunner {
 		tc4.setPosition(4);
 		b.addComplete(tc4);
 
-		// Adding a comment to the board
-		Comment p = new Comment();
-		p.setUsername(user.getUsername());
-		p.setDescription("Testing Seen Comments and im testing the length of the box");
-		b.addComment(p);
-
 		Comment p1 = new Comment();
 		p1.setUsername(user.getUsername());
 		p1.setDescription("Testing Unseen Comments");
@@ -130,30 +115,16 @@ public class SprintApplication implements CommandLineRunner {
 
 		boardRepository.save(b);
 
-		b.setOwner(user);
-		boardRepository.save(b);
-
-		// Adding users to board using roles
-		BoardRole ba = new BoardRole(user, b, "Product Owner");
-		b.getBoardRoles().add(ba);
-		user.getBoardRoles().add(ba);
-		boardRoleRepository.save(ba);
-
-		BoardRole ba1 = new BoardRole(jake, b, "Scrum Master");
-		b.getBoardRoles().add(ba1);
-		jake.getBoardRoles().add(ba1);
-		boardRoleRepository.save(ba1);
-
-		BoardRole ba2 = new BoardRole(seb, b, "Developer");
-		b.getBoardRoles().add(ba2);
-		seb.getBoardRoles().add(ba2);
-		boardRoleRepository.save(ba2);
+		user.getMyBoards().add(b);
+		userRepository.save(user);
 
 		Team team = new Team("Sprint Team", "Team used for developing the Sprint application.");
 		teamRepository.save(team);
-		team.getUsers().add(user);
-		user.getTeams().add(team);
-		teamRepository.save(team);
+		TeamRole teamRole = new TeamRole(user, team, "Product Owner");
+		team.getTeamRoles().add(teamRole);
+		user.getTeamRoles().add(teamRole);
+		teamRoleRepository.save(teamRole);
+
 
 		System.out.println("Main application has run successfully");
 	}

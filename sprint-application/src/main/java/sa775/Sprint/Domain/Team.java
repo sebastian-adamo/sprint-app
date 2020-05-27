@@ -19,11 +19,11 @@ public class Team {
     @OneToOne(cascade = CascadeType.ALL)
     private User creator;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<User> users = new HashSet<>();
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team")
+    private Set<TeamRole> teamRoles = new HashSet<>();
 
     public Team() {}
 
@@ -64,19 +64,19 @@ public class Team {
         this.creator = creator;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
     public List<Board> getBoards() {
         return boards;
     }
 
     public void setBoards(List<Board> boards) {
         this.boards = boards;
+    }
+
+    public Set<TeamRole> getTeamRoles() {
+        return teamRoles;
+    }
+
+    public void setTeamRoles(Set<TeamRole> teamRoles) {
+        this.teamRoles = teamRoles;
     }
 }

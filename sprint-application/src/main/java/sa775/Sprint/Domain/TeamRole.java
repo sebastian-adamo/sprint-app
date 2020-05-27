@@ -6,34 +6,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 
 @Entity
-public class BoardRole {
+public class TeamRole {
 
     @EmbeddedId
-    private BoardRoleId id = new BoardRoleId();
+    private TeamRoleId id = new TeamRoleId();
 
     @ManyToOne
     @MapsId("userId")
     private User user;
 
     @ManyToOne
-    @MapsId("boardId")
-    private Board board;
+    @MapsId("teamId")
+    private Team team;
 
     private String role; // Product Owner, Scrum Master, Developer
 
-    public BoardRole () {}
+    public TeamRole() {}
 
-    public BoardRole(User user, Board board, String role) {
+    public TeamRole(User user, Team team, String role) {
         this.user = user;
-        this.board = board;
+        this.team = team;
         this.role = role;
     }
 
-    public BoardRoleId getId() {
+    public TeamRoleId getId() {
         return id;
     }
 
-    public void setId(BoardRoleId id) {
+    public void setId(TeamRoleId id) {
         this.id = id;
     }
 
@@ -45,12 +45,12 @@ public class BoardRole {
         this.user = user;
     }
 
-    public Board getBoard() {
-        return board;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public String getRole() {

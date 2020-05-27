@@ -4,21 +4,21 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-public class BoardRoleId implements Serializable {
+public class TeamRoleId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long userId;
-    private Long boardId;
+    private int teamId;
 
-    public BoardRoleId() {
+    public TeamRoleId() {
 
     }
 
-    public BoardRoleId(Long userId, Long boardId) {
+    public TeamRoleId(Long userId, int teamId) {
         super();
         this.userId = userId;
-        this.boardId = boardId;
+        this.teamId = teamId;
     }
 
     public Long getUserId() {
@@ -29,11 +29,12 @@ public class BoardRoleId implements Serializable {
         this.userId = userId;
     }
 
-    public Long getBoardId() {
-        return boardId;
+    public int getTeamId() {
+        return teamId;
     }
 
-    public void setBoardId(Long boardId) {
-        this.boardId = boardId;
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
     }
+
 }

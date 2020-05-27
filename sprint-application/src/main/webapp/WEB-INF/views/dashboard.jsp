@@ -222,17 +222,17 @@
                     <i style="color: #818896; padding: 1rem" class="material-icons" onmouseover="this.style.cursor='pointer';" onclick="displayDashboard()">arrow_back</i>
 
                     <div id="my-boards-grid" class="grid">
-                        <c:forEach items="${user.boardRoles}" var="boardRole">
+                        <c:forEach items="${user.myBoards}" var="board">
                             <div class="module">
                                 <div style="width: 100%; height: 100%" class="card list-card boards-card">
-                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/tasks?id=${boardRole.board.id}">
+                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/tasks?id=${board.id}">
                                         <div style="height: 75%; text-align: center; padding-top: 30%" class="card-body">
-                                            <p class="card-text">${boardRole.board.name}</p>
+                                            <p class="card-text">${board.name}</p>
                                         </div>
                                     </a>
                                     <div class="card-footer">
-                                        <a class="material-icons" style="text-decoration: none; color: black" href="#edit-my-board-modal" rel="modal:open" onclick="getMyBoard('${boardRole.board.id}')"><i class="material-icons">create</i></a>
-                                        <i class="material-icons" onclick="deleteMyBoard('${boardRole.board.id}')">delete_outline</i>
+                                        <a class="material-icons" style="text-decoration: none; color: black" href="#edit-my-board-modal" rel="modal:open" onclick="getMyBoard('${board.id}')"><i class="material-icons">create</i></a>
+                                        <i class="material-icons" onclick="deleteMyBoard('${board.id}')">delete_outline</i>
                                     </div>
                                 </div>
                             </div>
@@ -291,13 +291,13 @@
                 <div style="height: 900px" class="col-lg-12">
                     <i style="color: #818896; padding: 1rem" class="material-icons" onmouseover="this.style.cursor='pointer';" onclick="displayDashboard()">arrow_back</i>
                     <div id="team-grid" class="grid">
-                        <c:forEach items="${user.teams}" var="team">
+                        <c:forEach items="${user.teamRoles}" var="teamRole">
                             <div class="module">
                                 <div style="width: 100%; height: 100%" class="card list-card boards-card">
-                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayTeamDetails('${team.id}')">
+                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="displayTeamDetails('${teamRole.team.id}')">
                                         <div style="height: 100%; text-align: center; padding-top: 30%" class="card-body">
                                             <p class="card-text"><i class="material-icons">group</i></p>
-                                            <p class="card-text">${team.name}</p>
+                                            <p class="card-text">${teamRole.team.name}</p>
                                         </div>
                                     </a>
                                 </div>
@@ -409,6 +409,7 @@
                                         <th scope="col"></th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Username</th>
+                                        <th scope="col">Role</th>
                                         <th scope="col">Status</th>
                                     </tr>
                                     </thead>
@@ -570,9 +571,9 @@
 
     function deleteTeamBoard(id) {
         $.ajax({
-            url: "/team/deleteBoard?id=" + id,
+            url: "/boards/delete?id=" + id,
             success: function() {
-                alert("Deleted")
+                getTeamBoards();
             }
         })
     }
@@ -601,6 +602,15 @@
         })
     }
 
+    function deleteTeam() {
+        $.ajax({
+            url: "/team/delete?id=" + teamId ,
+            success: function() {
+                $('#content-container').load(' #teams-row > *');
+            }
+        })
+    }
+
     function getTeamMembers() {
         $.ajax({
             url: "/team/getMembers?id=" + teamId,
@@ -612,6 +622,7 @@
                             '<th scope="row">Pic</th>' +
                             '<td>' + result[i].name + '</td>' +
                             '<td>' + result[i].username + '</td>' +
+                            '<td>' + result[i].role + '</td>' +
                             '<td>Active</td>' +
                         '</tr>'
                     );
@@ -619,15 +630,6 @@
             }
         })
 
-    }
-
-    function deleteTeam() {
-        $.ajax({
-            url: "/team/delete?id=" + teamId ,
-            success: function() {
-                $('#content-container').load(' #teams-row > *');
-            }
-        })
     }
 </script>
 </html>

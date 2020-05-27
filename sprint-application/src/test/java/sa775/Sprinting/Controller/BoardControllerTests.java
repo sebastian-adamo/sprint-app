@@ -6,7 +6,6 @@ import org.testng.xml.dom.Tag;
 import sa775.Sprint.Domain.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,13 +16,13 @@ public class BoardControllerTests {
 
     private User user;
     private Board board;
-    private BoardRole boardRole;
+    private TeamRole boardRole;
 
     @Before
     public void setup() {
         user = new User("admin", "admin@sprint.com", "admin");
         board = new Board("Test Board");
-        boardRole = new BoardRole(user, board, "Product Owner");
+        boardRole = new TeamRole(user, board, "Product Owner");
         board.setOwner(user);
         // Mock TODO List
         board.getTodo().add(new Task("Task 1", "Task 1", false, false, 0));

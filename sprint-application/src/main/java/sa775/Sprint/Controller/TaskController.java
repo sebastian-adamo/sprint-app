@@ -2,12 +2,10 @@ package sa775.Sprint.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sa775.Sprint.Domain.*;
 import sa775.Sprint.Repository.BoardRepository;
-import sa775.Sprint.Repository.BoardRoleRepository;
+import sa775.Sprint.Repository.TeamRoleRepository;
 import sa775.Sprint.Repository.TaskRepository;
 import sa775.Sprint.Repository.UserRepository;
 import sa775.Sprint.Service.NotificationService;
@@ -25,7 +23,7 @@ public class TaskController {
     @Autowired
     private BoardRepository boardRepository;
     @Autowired
-    private BoardRoleRepository boardRoleRepository;
+    private TeamRoleRepository boardRoleRepository;
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
@@ -40,18 +38,12 @@ public class TaskController {
     @GetMapping("/add/backlog")
     public String addBacklog(@RequestParam(value = "name") String name) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
         Task t = new Task();
         t.setName(name);
         t.setPosition(board.getBacklog().size()+1);
         board.addBacklog(t);
         boardRepository.save(board);
-
-        // Notification
-        List<BoardRole> boardRoles = boardRoleRepository.findAllByBoard(board);
-        for (BoardRole boardRole : boardRoles) {
-            notificationService.notification("A task has been added to 'Backlog' in board: '" + board.getName() + "'", boardRole.getUser());
-        }
 
         return "success";
     }
@@ -59,18 +51,13 @@ public class TaskController {
     @GetMapping("/add/todo")
     public String addTodo(@RequestParam(value = "name") String name) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
         Task t = new Task();
         t.setName(name);
         t.setPosition(board.getTodo().size()+1);
         board.addTodo(t);
         boardRepository.save(board);
 
-        // Notification
-        List<BoardRole> boardRoles = boardRoleRepository.findAllByBoard(board);
-        for (BoardRole boardRole : boardRoles) {
-            notificationService.notification("A task has been added to 'TODO' in board: '" + board.getName() + "'", boardRole.getUser());
-        }
 
         return "success";
     }
@@ -78,18 +65,12 @@ public class TaskController {
     @GetMapping("/add/inprogress")
     public String addInprogress(@RequestParam(value = "name") String name) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
         Task t = new Task();
         t.setName(name);
         t.setPosition(board.getInprogress().size()+1);
         board.addInprogress(t);
         boardRepository.save(board);
-
-        // Notification
-        List<BoardRole> boardRoles = boardRoleRepository.findAllByBoard(board);
-        for (BoardRole boardRole : boardRoles) {
-            notificationService.notification("A task has been added to 'In Progress' in board: '" + board.getName() + "'", boardRole.getUser());
-        }
 
         return "success";
     }
@@ -97,18 +78,12 @@ public class TaskController {
     @GetMapping("/add/complete")
     public String addComplete(@RequestParam(value = "name") String name) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
         Task t = new Task();
         t.setName(name);
         t.setPosition(board.getComplete().size()+1);
         board.addComplete(t);
         boardRepository.save(board);
-
-        // Notification
-        List<BoardRole> boardRoles = boardRoleRepository.findAllByBoard(board);
-        for (BoardRole boardRole : boardRoles) {
-            notificationService.notification("A task has been added to 'Complete' in board: '" + board.getName() + "'", boardRole.getUser());
-        }
 
         return "success";
     }
@@ -139,7 +114,7 @@ public class TaskController {
     @GetMapping("/save")
     public int save(@RequestParam(value = "id") int id, @RequestParam(value = "name") String name, @RequestParam(value = "description") String description, @RequestParam("dod") boolean dod, @RequestParam("complete") boolean complete) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
 
         Task t = taskRepository.findById(id);
         t.setName(name);
@@ -154,19 +129,11 @@ public class TaskController {
     @GetMapping("/comment")
     public Comment addTaskComment(@RequestParam(value = "id") int id, @RequestParam(value = "comment") String comment) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
         Task t = taskRepository.findById(id);
         Comment c = new Comment(user.getUsername(), comment);
         t.getComments().add(c);
         taskRepository.save(t);
-
-        // Notification
-        List<BoardRole> boardRoles = boardRoleRepository.findAllByBoard(board);
-        for (BoardRole boardRole : boardRoles) {
-            if (comment.contains("@" + boardRole.getUser().getUsername())) {
-                notificationService.notification("You were mentioned in a comment in board: '" + board.getName() + "'", boardRole.getUser());
-            }
-        }
 
         return c;
     }
@@ -174,7 +141,7 @@ public class TaskController {
     @GetMapping("/position")
     public String movePosition(@RequestParam(value = "id") int id, @RequestParam(value = "position") int position, @RequestParam(value = "list") String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
         Task t = taskRepository.findById(id);
         switch(list) {
             case "backlog-list":
@@ -237,7 +204,7 @@ public class TaskController {
     @GetMapping("/move")
     public String moveTask(@RequestParam(value = "id") int id, @RequestParam(value = "position") int position, @RequestParam(value = "list") String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
 
         // Copying contents of old task to new task and deleting old task
         Task t = taskRepository.findById(id);

@@ -6,6 +6,5 @@ import sa775.Sprint.Domain.Board;
 
 import java.util.List;
 
-public interface BoardRepository extends JpaRepository<Board, Integer> {
-    Board findById(Long id);
+public interface BoardRepository extends JpaRepository<Board, Long> {
 }

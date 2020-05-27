@@ -3,14 +3,14 @@ package sa775.Sprinting.Domain;
 import org.junit.Before;
 import org.junit.Test;
 import sa775.Sprint.Domain.Board;
-import sa775.Sprint.Domain.BoardRole;
+import sa775.Sprint.Domain.TeamRole;
 import sa775.Sprint.Domain.User;
 
 import static org.junit.Assert.assertEquals;
 
 public class BoardRoleTests {
 
-    private BoardRole boardRole;
+    private TeamRole boardRole;
     private Board board;
     private User user;
 
@@ -18,7 +18,7 @@ public class BoardRoleTests {
     public void setup() {
         board = new Board("Board");
         user = new User("admin", "admin@sprint.com", "admin");
-        boardRole = new BoardRole(user, board, "Product Owner");
+        boardRole = new TeamRole(user, board, "Product Owner");
     }
 
     @Test

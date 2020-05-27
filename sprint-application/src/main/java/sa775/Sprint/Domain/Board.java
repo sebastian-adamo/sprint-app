@@ -34,14 +34,8 @@ public class Board {
     @OneToOne(cascade = CascadeType.ALL)
     private User owner;
 
-    @OneToMany(mappedBy = "board")
-    private Set<BoardRole> boardRoles = new HashSet<>();
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<Poll> polls = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
 
     public Board() {}
 
@@ -151,31 +145,11 @@ public class Board {
         this.polls = polls;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-    }
-
     public User getOwner() {
         return owner;
     }
 
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public Set<BoardRole> getBoardRoles() {
-        return boardRoles;
-    }
-
-    public void setBoardRoles(Set<BoardRole> boardRoles) {
-        this.boardRoles = boardRoles;
     }
 }

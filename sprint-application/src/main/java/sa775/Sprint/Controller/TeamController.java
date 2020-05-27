@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sa775.Sprint.Domain.Board;
 import sa775.Sprint.Domain.Team;
+import sa775.Sprint.Domain.TeamRole;
 import sa775.Sprint.Domain.User;
 import sa775.Sprint.Repository.BoardRepository;
 import sa775.Sprint.Repository.TeamRepository;
+import sa775.Sprint.Repository.TeamRoleRepository;
 import sa775.Sprint.Repository.UserRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +31,8 @@ public class TeamController {
     private TeamRepository teamRepository;
     @Autowired
     private BoardRepository boardRepository;
+    @Autowired
+    private TeamRoleRepository teamRoleRepository;
 
     @GetMapping("/create")
     public void create(@RequestParam("name") String name, @RequestParam("description") String description) {
@@ -36,14 +41,16 @@ public class TeamController {
         team.setCreator(user);
         teamRepository.save(team);
 
-        team.getUsers().add(user);
-        user.getTeams().add(team);
-        teamRepository.save(team);
+        TeamRole teamRole = new TeamRole(user, team, "Product Owner");
+        team.getTeamRoles().add(teamRole);
+        user.getTeamRoles().add(teamRole);
+        teamRoleRepository.save(teamRole);
     }
 
+    @Transactional
     @GetMapping("/delete")
     public void delete(@RequestParam("id") int id) {
-        teamRepository.deleteById(id);
+        teamRoleRepository.deleteAllByTeamId(id);
     }
 
     @GetMapping("/getBoards")
@@ -65,7 +72,7 @@ public class TeamController {
     }
 
     @GetMapping("/deleteBoard")
-    public void deleteBoard(@RequestParam("id") int id) {
+    public void deleteBoard(@RequestParam("id") Long id) {
         boardRepository.deleteById(id);
     }
 
@@ -93,18 +100,16 @@ public class TeamController {
     public List<HashMap<String,Object>> getMembers(@RequestParam("id") int id) {
         List<HashMap<String,Object>> returnList = new ArrayList<>();
 
-        Team team = teamRepository.findById(id).orElse(null);
-        assert team != null;
-
-        for (User user : team.getUsers()) {
+        for (TeamRole teamRole : teamRoleRepository.findAllByTeamId(id)) {
             HashMap<String, Object> map = new HashMap<String, Object>();
-            if(user.getFullname() == null) {
+            if(teamRole.getUser().getFullname() == null) {
                 map.put("name", "");
             }
             else {
-                map.put("name", user.getFullname());
+                map.put("name", teamRole.getUser().getFullname());
             }
-            map.put("username", user.getUsername());
+            map.put("username", teamRole.getUser().getUsername());
+            map.put("role", teamRole.getRole());
             returnList.add(map);
         }
 

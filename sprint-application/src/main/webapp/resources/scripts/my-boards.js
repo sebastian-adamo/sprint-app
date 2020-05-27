@@ -20,15 +20,6 @@ function createMyBoard() {
     }
 }
 
-function deleteMyBoard(id) {
-    $.ajax({
-        url: "/boards/delete?id=" + id,
-        success: function(result) {
-            $('#content-container').load(' #my-boards-row > *');
-        }
-    })
-}
-
 function getMyBoard(id) {
     $.ajax({
         url: "/boards/getMyBoard?id=" + id,
@@ -58,4 +49,13 @@ function saveMyBoard() {
             }
         })
     }
+}
+
+function deleteMyBoard(id) {
+    $.ajax({
+        url: "/boards/delete?id=" + id,
+        success: function() {
+            $('#content-container').load(' #my-boards-row > *');
+        }
+    })
 }

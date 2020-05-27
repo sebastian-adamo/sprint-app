@@ -34,7 +34,8 @@ public class PollController {
     @GetMapping("/create")
     public String create(@RequestParam("question") String question, @RequestParam("list") String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
+        assert board != null;
         Poll poll = new Poll(question);
         poll.setCreator(user);
         pollRepository.save(poll);
