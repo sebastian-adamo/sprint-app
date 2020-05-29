@@ -2,9 +2,7 @@ package sa775.Sprint.Domain;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Task {
@@ -15,20 +13,29 @@ public class Task {
     private String description;
     private int position;
     private boolean definitionOfDone = false;
-    private boolean complete = false;
     private int progress = 0;
     private Date due;
 
     @OneToMany(cascade = CascadeType.ALL)
+    private List<Todo> todos = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<Comment>();
+
+    @ManyToMany(mappedBy = "votedTasks")
+    private Set<User> usersVoted = new HashSet<>();
 
     public Task() {}
 
-    public Task(String name, String description, boolean definitionOfDone, boolean complete, int progress) {
+    public Task(String name, int position) {
+        this.name = name;
+        this.position = position;
+    }
+
+    public Task(String name, String description, boolean definitionOfDone, int progress) {
         this.name = name;
         this.description = description;
         this.definitionOfDone = definitionOfDone;
-        this.complete = complete;
         this.progress = progress;
     }
 
@@ -72,23 +79,14 @@ public class Task {
         this.definitionOfDone = definitionOfDone;
     }
 
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(boolean complete) {
-        this.complete = complete;
-    }
-
     public int getProgress() {
         this.progress = 0;
-        if (this.definitionOfDone) {
-            this.progress += 50;
+        for (Todo todo : this.getTodos()) {
+            if (todo.isComplete()) {
+                this.progress += (100 / this.getTodos().size());
+            }
         }
-        if (this.complete) {
-            this.progress += 50;
-        }
-        return this.progress;
+        return progress;
     }
 
     public void setProgress(int progress) {
@@ -108,11 +106,27 @@ public class Task {
         return simpleDateFormat.format(this.due);
     }
 
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<Todo> todos) {
+        this.todos = todos;
+    }
+
     public List<Comment> getComments() {
         return comments;
     }
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Set<User> getUsersVoted() {
+        return usersVoted;
+    }
+
+    public void setUsersVoted(Set<User> usersVoted) {
+        this.usersVoted = usersVoted;
     }
 }

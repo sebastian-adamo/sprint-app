@@ -3,7 +3,6 @@
   User: Sebastian Adamo
   Date: 5/24/2020
   Time: 1:01 PM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -51,17 +50,20 @@
 
 
     <script src="<c:url value="/resources/scripts/main.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/dashboard-my-boards.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/dashboard-teams.js"/>"></script>
+    <!-- Calendar File HERE -->
     <script src="<c:url value="/resources/scripts/account.js"/>"></script>
-    <script src="<c:url value="/resources/scripts/my-boards.js"/>"></script>
 </head>
 <body>
 <div class="page-wrapper chiller-theme">
-    <%--    Sidebar --%>
+    <!-- Sidebar -->
     <nav id="sidebar" class="sidebar-wrapper">
         <div class="sidebar-content">
             <div class="sidebar-brand">
-                <a href="#">Sprint</a>
+                <a href="${pageContext.request.contextPath}/dashboard">Sprint</a>
             </div>
+            <!-- Dashboard Navigation -->
             <div class="sidebar-menu">
                 <ul>
                     <li class="header-menu">
@@ -86,7 +88,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a onclick="">
                             <i class="fa fa-calendar"></i>
                             <span>Calendar</span>
                         </a>
@@ -99,33 +101,53 @@
                     </li>
                 </ul>
             </div>
+            <!-- !Dashboard Navigation -->
+
+            <!-- Recent Boards -->
             <div class="sidebar-menu">
                 <ul>
                     <li class="header-menu">
                         <span>RECENT BOARDS</span>
                     </li>
+                    <c:forEach items="${user.recentBoards}" var="recentBoard">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/tasks?id=${recentBoard.id}">
+                                <i class="fa fa-th-list"></i>
+                                <span>${recentBoard.name}</span>
+                            </a>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
+            <!-- !Recent Boards -->
         </div>
     </nav>
-    <%--    Main Wrapper--%>
+    <!-- !Sidebar -->
+
+    <!-- Main Wrapper -->
     <main class="page-content">
-        <%--        Navbar--%>
+        <!-- Navbar -->
         <nav id="navbar" class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <!-- Logo -->
             <a style="padding-top: 25px;" id="logo" class="navbar-brand" href="${pageContext.request.contextPath}/dashboard"><img src="<c:url value="/resources/images/logo.svg"/>" style="width: 120px; height: 60px;" alt="logo"/></a>
-            <!-- Links -->
+            <!-- !Logo -->
+            <!-- Left Side -->
             <ul class="navbar-nav">
-                <!-- Home -->
+                <!-- Menu -->
                 <li class="nav-item">
                     <a id="show-sidebar" class="nav-link" onclick="toggleSidebar()"><i class="material-icons">menu</i></a>
                 </li>
+                <!-- !Menu -->
+                <!-- Home -->
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/dashboard"><i class="material-icons">home</i></a>
                 </li>
+                <!-- !Home -->
             </ul>
-
-            <%--            Right Side Navbar--%>
+            <!-- !Left Side -->
+            <!-- Right Side -->
             <ul class="navbar-nav ml-auto">
+                <!-- Notifications -->
                 <li id="notifications-dropdown" class="nav-item dropdown">
                     <a class="nav-link" href="#" id="notifications" data-toggle="dropdown">
                         <i class="material-icons">notifications</i>
@@ -147,6 +169,7 @@
                         <a data-toggle="modal" data-target="#notification-modal" class="dropdown-item">View all notifications</a>
                     </div>
                 </li>
+                <!-- !Notifications -->
                 <!-- User -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" id="navbardrop" data-toggle="dropdown">
@@ -155,17 +178,20 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-header">Account</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/account">Edit Details</a>
+                        <a class="dropdown-item" onclick="displaySettings()">Edit Details</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/account">Settings</a>
+                        <a class="dropdown-item" onclick="displaySettings()">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a>
                     </div>
                 </li>
+                <!-- !User -->
             </ul>
+            <!-- !Right Side -->
         </nav>
-        <%--        Main Content--%>
-        <div id="content-container" class="container-fluid">
+        <!-- !Navbar -->
+        <!-- Main Content -->
+        <div style="padding-left: 25%; padding-right: 25%" id="content-container" class="container-fluid">
 
             <!-- Dashboard -->
             <div id="dashboard-row" class="row">
@@ -232,26 +258,11 @@
                                     </a>
                                     <div class="card-footer">
                                         <a class="material-icons" style="text-decoration: none; color: black" href="#edit-my-board-modal" rel="modal:open" onclick="getMyBoard('${board.id}')"><i class="material-icons">create</i></a>
-                                        <i class="material-icons" onclick="deleteMyBoard('${board.id}')">delete_outline</i>
+                                        <i class="material-icons" onclick="deleteMyBoard('${board.id}')">delete</i>
                                     </div>
                                 </div>
                             </div>
                         </c:forEach>
-                        <div style="width: 70%; height: 60%" id="edit-my-board-modal" class="modal">
-                            <form style="padding-top: 1rem !important;" id="edit-board-form" class="text-center p-5">
-                                <label for="edit-my-board-name">Name</label>
-                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="edit-my-board-name" class="form-control mb-4" placeholder="Enter a name...">
-                                <div style="margin-top: 8px;" class="form-group">
-                                    <label for="edit-my-board-description">Description</label>
-                                    <textarea class="form-control rounded-0" id="edit-my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
-                                </div>
-                                <div style="margin-top: 8px;" class="form-group">
-                                    <label for="edit-my-board-dod">Definition of Done</label>
-                                    <textarea class="form-control rounded-0" id="edit-my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
-                                </div>
-                                <button id="save-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="saveMyBoard()">Save</button>
-                            </form>
-                        </div>
 
                         <!-- Create Board -->
                         <div class="module">
@@ -263,22 +274,6 @@
                                     </div>
                                 </a>
                             </div>
-                        </div>
-                        <div style="width: 70%; height: 60%" id="my-board-modal" class="modal">
-                            <input id="my-board-id" style="display: none">
-                            <form style="padding-top: 1rem !important;" id="create-board-form" class="text-center p-5">
-                                <label for="my-board-name">Name</label>
-                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="my-board-name" class="form-control mb-4" placeholder="Enter a name...">
-                                <div style="margin-top: 8px;" class="form-group">
-                                    <label for="my-board-description">Description</label>
-                                    <textarea class="form-control rounded-0" id="my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
-                                </div>
-                                <div style="margin-top: 8px;" class="form-group">
-                                    <label for="my-board-dod">Definition of Done</label>
-                                    <textarea class="form-control rounded-0" id="my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
-                                </div>
-                                <button id="create-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createMyBoard()">Create</button>
-                            </form>
                         </div>
                         <!-- !Create Board -->
                     </div>
@@ -315,17 +310,6 @@
                                 </a>
                             </div>
                         </div>
-                        <div style="width: 70%; height: 60%" id="create-team-modal" class="modal">
-                            <form style="padding-top: 1rem !important;" id="create-team-form" class="text-center p-5">
-                                <label for="create-team-name">Name</label>
-                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="create-team-name" class="form-control mb-4" placeholder="Enter a team name..." required>
-                                <div style="margin-top: 8px;" class="form-group">
-                                    <label for="create-team-description">Description</label>
-                                    <textarea class="form-control rounded-0" id="create-team-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
-                                </div>
-                                <button id="create-team" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createTeam()">Create</button>
-                            </form>
-                        </div>
                         <!-- !Create Team -->
                     </div>
                 </div>
@@ -352,6 +336,8 @@
                         <div class="tab-pane fade show active" id="team-boards" role="tabpanel" aria-labelledby="team-boards-tab">
                             <div style="padding-top: 2rem" id="team-boards-grid" class="grid">
                                 <!-- Team Boards Prepended Here -->
+                            </div>
+                            <div style="padding-top: 2rem" id="create-team-boards-grid" class="grid">
                                 <!-- Create Team Board -->
                                 <div class="module">
                                     <div style="width: 100%; height: 100%" class="card list-card boards-card">
@@ -362,21 +348,6 @@
                                             </div>
                                         </a>
                                     </div>
-                                </div>
-                                <div style="width: 70%; height: 60%" id="create-team-board-modal" class="modal">
-                                    <form style="padding-top: 1rem !important;" id="create-team-board-form" class="text-center p-5">
-                                        <label for="create-team-board-name">Name</label>
-                                        <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="create-team-board-name" class="form-control mb-4" placeholder="Enter a name...">
-                                        <div style="margin-top: 8px;" class="form-group">
-                                            <label for="create-team-board-description">Description</label>
-                                            <textarea class="form-control rounded-0" id="create-team-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
-                                        </div>
-                                        <div style="margin-top: 8px;" class="form-group">
-                                            <label for="create-team-board-dod">Definition of Done</label>
-                                            <textarea class="form-control rounded-0" id="create-team-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
-                                        </div>
-                                        <button id="create-team-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createTeamBoard()">Create</button>
-                                    </form>
                                 </div>
                                 <!-- !Create Team Board -->
                             </div>
@@ -474,7 +445,83 @@
             <!-- !Settings -->
 
         </div>
+        <!-- !Main Content -->
+
+        <!-- Modals -->
+
+        <!-- Edit Board Modal -->
+        <div style="width: 70%; height: 60%" id="edit-my-board-modal" class="modal">
+            <form style="padding-top: 1rem !important;" id="edit-board-form" class="text-center p-5">
+                <label for="edit-my-board-name">Name</label>
+                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="edit-my-board-name" class="form-control mb-4" placeholder="Enter a name...">
+                <div style="margin-top: 8px;" class="form-group">
+                    <label for="edit-my-board-description">Description</label>
+                    <textarea class="form-control rounded-0" id="edit-my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                </div>
+                <div style="margin-top: 8px;" class="form-group">
+                    <label for="edit-my-board-dod">Definition of Done</label>
+                    <textarea class="form-control rounded-0" id="edit-my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
+                </div>
+                <button id="save-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="saveMyBoard()">Save</button>
+            </form>
+        </div>
+        <!-- !Edit Board Modal -->
+
+
+        <!-- My Board Modal -->
+        <div style="width: 70%; height: 60%" id="my-board-modal" class="modal">
+            <input id="my-board-id" style="display: none">
+            <form style="padding-top: 1rem !important;" id="create-board-form" class="text-center p-5">
+                <label for="my-board-name">Name</label>
+                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="my-board-name" class="form-control mb-4" placeholder="Enter a name...">
+                <div style="margin-top: 8px;" class="form-group">
+                    <label for="my-board-description">Description</label>
+                    <textarea class="form-control rounded-0" id="my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                </div>
+                <div style="margin-top: 8px;" class="form-group">
+                    <label for="my-board-dod">Definition of Done</label>
+                    <textarea class="form-control rounded-0" id="my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
+                </div>
+                <button id="create-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createMyBoard()">Create</button>
+            </form>
+        </div>
+        <!-- !My Board Modal -->
+
+        <!-- Create Team Modal -->
+        <div style="width: 70%; height: 60%" id="create-team-modal" class="modal">
+            <form style="padding-top: 1rem !important;" id="create-team-form" class="text-center p-5">
+                <label for="create-team-name">Name</label>
+                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="create-team-name" class="form-control mb-4" placeholder="Enter a team name...">
+                <div style="margin-top: 8px;" class="form-group">
+                    <label for="create-team-description">Description</label>
+                    <textarea class="form-control rounded-0" id="create-team-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                </div>
+                <button id="create-team" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createTeam()">Create</button>
+            </form>
+        </div>
+        <!-- !Create Team Modal -->
+
+        <!-- Create Team Board Modal -->
+        <div style="width: 70%; height: 60%" id="create-team-board-modal" class="modal">
+            <form style="padding-top: 1rem !important;" id="create-team-board-form" class="text-center p-5">
+                <label for="create-team-board-name">Name</label>
+                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="create-team-board-name" class="form-control mb-4" placeholder="Enter a name...">
+                <div style="margin-top: 8px;" class="form-group">
+                    <label for="create-team-board-description">Description</label>
+                    <textarea class="form-control rounded-0" id="create-team-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                </div>
+                <div style="margin-top: 8px;" class="form-group">
+                    <label for="create-team-board-dod">Definition of Done</label>
+                    <textarea class="form-control rounded-0" id="create-team-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
+                </div>
+                <button id="create-team-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createTeamBoard()">Create</button>
+            </form>
+        </div>
+        <!-- !Create Team Board Modal -->
+
+        <!-- !Modals -->
     </main>
+
 </div>
 </body>
 
@@ -487,149 +534,10 @@
         $('#content-container').load(' #my-boards-row > *');
     }
 
-    function displayTeams() {
-        $('#content-container').load(' #teams-row > *');
-    }
-
-    let teamId;
-
-    function displayTeamDetails(id) {
-        teamId = id;
-        getTeamBoards();
-        $('#content-container').load(' #team-details-row > *');
-    }
 
     function displaySettings() {
         $('#content-container').load(' #settings-row > *');
     }
 
-    function createTeam() {
-        let name, description;
-
-        name = $('#create-team-name').val();
-        description = $('#create-team-description').val();
-
-
-        if (name !== '') {
-            $.ajax({
-                url: "/team/create?name=" + name + "&description=" + description,
-                success: function() {
-                    $('#content-container').load(' #teams-row > *');
-                    $('.close-modal').trigger('click');
-                }
-            })
-        }
-    }
-
-    function getTeamBoards() {
-        $.ajax({
-            url: "/team/getBoards?id=" + teamId,
-            success: function(result) {
-                $('#team-boards-grid').empty();
-                for (let i = 0; i < result.length; i++) {
-                    $('#team-boards-grid').prepend(
-                        '<div class="module">\n' +
-                            '<div style="width: 100%; height: 100%" class="card list-card boards-card">\n' +
-                                '<a href="/tasks?id=' + result[i].id + '" style="text-decoration: none; color: #0f0f0f; display: block; height: 100%">\n' +
-                                    '<div style="height: 75%; text-align: center; padding-top: 30%" class="card-body">\n' +
-                                        '<p class="card-text">' + result[i].name + '</p>\n' +
-                                    '</div>\n' +
-                                '</a>\n' +
-                                '<div class="card-footer">\n' +
-                                '<a class="material-icons" style="text-decoration: none; color: black" href="#edit-my-board-modal" rel="modal:open"><i class="material-icons">create</i></a>\n' +
-                                '<i class="material-icons" onclick="deleteTeamBoard(\'' + result[i].id + '\')">delete_outline</i>\n' +
-                                '</div>\n' +
-                            '</div>\n' +
-                        '</div>'
-                    );
-                }
-            }
-        })
-    }
-
-    function createTeamBoard() {
-        var name, description, dod;
-
-        name = $('#create-team-board-name').val();
-        description = $('#create-team-board-description').val();
-        dod = $('#create-team-board-dod').val();
-
-        if (name !== '') {
-            $.ajax({
-                url: "/team/createBoard?id=" + teamId +  "&name=" + name + "&description=" + description + "&dod=" + dod,
-                success: function() {
-                    getTeamBoards();
-                    $('.close-modal').trigger('click');
-                }
-            })
-        }
-        else {
-            // Change
-            alert("Please enter a board name.")
-        }
-    }
-
-    function deleteTeamBoard(id) {
-        $.ajax({
-            url: "/boards/delete?id=" + id,
-            success: function() {
-                getTeamBoards();
-            }
-        })
-    }
-
-    function getTeamDetails() {
-        $.ajax({
-            url: "/team/getDetails?id=" + teamId,
-            success: function(result) {
-                $('#team-name').val(result.name);
-                $('#team-description').val(result.description);
-            }
-        })
-    }
-
-    function saveTeamDetails() {
-        let name, description;
-
-        name = $('#team-name').val();
-        description = $('#team-description').val();
-
-        $.ajax({
-            url: "/team/saveDetails?id=" + teamId + "&name=" + name + "&description=" + description,
-            success: function() {
-                alert("Team details have been saved.")
-            }
-        })
-    }
-
-    function deleteTeam() {
-        $.ajax({
-            url: "/team/delete?id=" + teamId ,
-            success: function() {
-                $('#content-container').load(' #teams-row > *');
-            }
-        })
-    }
-
-    function getTeamMembers() {
-        $.ajax({
-            url: "/team/getMembers?id=" + teamId,
-            success: function(result) {
-                $('#team-members-table').empty();
-                for (let i = 0; i < result.length; i++) {
-                    $('#team-members-table').append(
-                        '<tr>' +
-                            '<th scope="row">Pic</th>' +
-                            '<td>' + result[i].name + '</td>' +
-                            '<td>' + result[i].username + '</td>' +
-                            '<td>' + result[i].role + '</td>' +
-                            '<td>Active</td>' +
-                        '</tr>'
-                    );
-                }
-            }
-        })
-
-    }
 </script>
 </html>

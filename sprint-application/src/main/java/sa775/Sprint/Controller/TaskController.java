@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import sa775.Sprint.Domain.*;
-import sa775.Sprint.Repository.BoardRepository;
-import sa775.Sprint.Repository.TeamRoleRepository;
-import sa775.Sprint.Repository.TaskRepository;
-import sa775.Sprint.Repository.UserRepository;
+import sa775.Sprint.Repository.*;
 import sa775.Sprint.Service.NotificationService;
 
 import java.text.ParseException;
@@ -23,69 +20,62 @@ public class TaskController {
     @Autowired
     private BoardRepository boardRepository;
     @Autowired
-    private TeamRoleRepository boardRoleRepository;
-    @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private TodoRepository todoRepository;
     @Autowired
     private NotificationService notificationService;
 
+    @GetMapping("/add")
+    public void add(@RequestParam(value = "name") String name, @RequestParam(value = "list") String list) {
+        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
+        assert board != null;
+
+        switch (list) {
+            case "backlog":
+                Task task = new Task(name, board.getBacklog().size()+1);
+                board.addBacklog(task);
+                break;
+            case "todo":
+                Task task1 = new Task(name, board.getTodo().size()+1);
+                board.addTodo(task1);
+                break;
+            case "inprogress":
+                Task task2 = new Task(name, board.getInprogress().size()+1);
+                board.addInprogress(task2);
+                break;
+            case "complete":
+                Task task3 = new Task(name, board.getComplete().size()+1);
+                board.addComplete(task3);
+                break;
+        }
+        boardRepository.save(board);
+    }
+
     @GetMapping("/delete")
-    public String delete(@RequestParam(value = "id") int id) {
+    public void delete(@RequestParam(value = "id") int id) {
         taskRepository.deleteById(id);
-        return "success" ;
     }
 
-    @GetMapping("/add/backlog")
-    public String addBacklog(@RequestParam(value = "name") String name) {
+    @GetMapping("/vote")
+    public void vote(@RequestParam(value = "id") int id) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
-        Task t = new Task();
-        t.setName(name);
-        t.setPosition(board.getBacklog().size()+1);
-        board.addBacklog(t);
-        boardRepository.save(board);
+        Task task = taskRepository.findById(id);
 
-        return "success";
+        task.getUsersVoted().add(user);
+        user.getVotedTasks().add(task);
+        userRepository.save(user);
     }
 
-    @GetMapping("/add/todo")
-    public String addTodo(@RequestParam(value = "name") String name) {
+    @GetMapping("/unvote")
+    public void unvote(@RequestParam(value = "id") int id) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
-        Task t = new Task();
-        t.setName(name);
-        t.setPosition(board.getTodo().size()+1);
-        board.addTodo(t);
-        boardRepository.save(board);
+        Task task = taskRepository.findById(id);
 
-
-        return "success";
-    }
-
-    @GetMapping("/add/inprogress")
-    public String addInprogress(@RequestParam(value = "name") String name) {
-        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
-        Task t = new Task();
-        t.setName(name);
-        t.setPosition(board.getInprogress().size()+1);
-        board.addInprogress(t);
-        boardRepository.save(board);
-
-        return "success";
-    }
-
-    @GetMapping("/add/complete")
-    public String addComplete(@RequestParam(value = "name") String name) {
-        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
-        Task t = new Task();
-        t.setName(name);
-        t.setPosition(board.getComplete().size()+1);
-        board.addComplete(t);
-        boardRepository.save(board);
-
-        return "success";
+        task.getUsersVoted().remove(user);
+        user.getVotedTasks().remove(task);
+        userRepository.save(user);
     }
 
     @GetMapping("/get")
@@ -95,8 +85,6 @@ public class TaskController {
         returnMap.put("name", task.getName());
         returnMap.put("description", task.getDescription());
         returnMap.put("dod", task.isDefinitionOfDone());
-        returnMap.put("complete", task.isComplete());
-        returnMap.put("progress", task.getProgress());
         if(task.getDue() == null) {
             returnMap.put("due", "");
         }
@@ -104,44 +92,88 @@ public class TaskController {
             returnMap.put("due", task.getFormattedDue());
         }
 
-        List<Comment> comments = taskRepository.findById(id).getComments();
-        comments.sort(Comparator.comparing(Comment::getDatetime).reversed());
-        returnMap.put("comments", comments);
-
         return returnMap;
     }
 
-    @GetMapping("/save")
-    public int save(@RequestParam(value = "id") int id, @RequestParam(value = "name") String name, @RequestParam(value = "description") String description, @RequestParam("dod") boolean dod, @RequestParam("complete") boolean complete) {
-        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
-
-        Task t = taskRepository.findById(id);
-        t.setName(name);
-        t.setDescription(description);
-        t.setDefinitionOfDone(dod);
-        t.setComplete(complete);
-        taskRepository.save(t);
-
-        return t.getProgress();
+    @GetMapping("/getProgress")
+    public int getProgress(@RequestParam(value = "id") int id) {
+        return taskRepository.findById(id).getProgress();
     }
 
-    @GetMapping("/comment")
-    public Comment addTaskComment(@RequestParam(value = "id") int id, @RequestParam(value = "comment") String comment) {
-        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
-        Task t = taskRepository.findById(id);
-        Comment c = new Comment(user.getUsername(), comment);
-        t.getComments().add(c);
-        taskRepository.save(t);
+    @GetMapping("/getTodos")
+    public List<Todo> getTodos(@RequestParam(value = "id") int id) {
+        Task task = taskRepository.findById(id);
+        task.getTodos().sort(Comparator.comparing(Todo::getCreated));
+        return task.getTodos();
+    }
 
-        return c;
+    @GetMapping("/updateTodo")
+    public void updateTodo(@RequestParam(value = "id") int id) {
+        Todo todo = todoRepository.findById(id).orElse(null);
+        assert todo != null;
+        todo.setComplete(!todo.isComplete());
+        todoRepository.save(todo);
+    }
+
+    @GetMapping("/addTodo")
+    public void addTodo(@RequestParam(value = "id") int id, @RequestParam(value = "description") String description) {
+        Task task = taskRepository.findById(id);
+        Todo todo = new Todo(description);
+        task.getTodos().add(todo);
+        taskRepository.save(task);
+    }
+
+    @GetMapping("/getActivity")
+    public List<Comment> getActivity(@RequestParam(value = "id") int id) {
+        Task task = taskRepository.findById(id);
+        task.getComments().sort(Comparator.comparing(Comment::getDatetime));
+        return task.getComments();
+    }
+
+    @GetMapping("/addComment")
+    public Comment addComment(@RequestParam(value = "id") int id, @RequestParam(value = "description") String description) {
+        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Task task = taskRepository.findById(id);
+        Comment comment = new Comment(user.getUsername(), description);
+        task.getComments().add(comment);
+        taskRepository.save(task);
+        return comment;
+    }
+
+    @GetMapping("/saveName")
+    public void saveName(@RequestParam(value = "id") int id, @RequestParam(value = "name") String name) {
+        Task t = taskRepository.findById(id);
+        t.setName(name);
+        taskRepository.save(t);
+    }
+
+    @GetMapping("/saveDescription")
+    public void saveDescription(@RequestParam(value = "id") int id, @RequestParam(value = "description") String description) {
+        Task t = taskRepository.findById(id);
+        t.setDescription(description);
+        taskRepository.save(t);
+    }
+
+    @GetMapping("/updateDod")
+    public void updateDod(@RequestParam(value = "id") int id) {
+        Task task = taskRepository.findById(id);
+        task.setDefinitionOfDone(!task.isDefinitionOfDone());
+        taskRepository.save(task);
+    }
+
+    @GetMapping("/setDue")
+    public void setDue(@RequestParam(value = "id") int id, @RequestParam(value = "due") String due) throws ParseException {
+        Task task = taskRepository.findById(id);
+        Date date = new SimpleDateFormat("MM/dd/yyyy").parse(due);
+        task.setDue(date);
+        taskRepository.save(task);
     }
 
     @GetMapping("/position")
-    public String movePosition(@RequestParam(value = "id") int id, @RequestParam(value = "position") int position, @RequestParam(value = "list") String list) {
+    public void movePosition(@RequestParam(value = "id") int id, @RequestParam(value = "position") int position, @RequestParam(value = "list") String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
+        assert board != null;
         Task t = taskRepository.findById(id);
         switch(list) {
             case "backlog-list":
@@ -197,21 +229,22 @@ public class TaskController {
 
         t.setPosition(position);
         taskRepository.save(t);
-
-        return "success";
     }
 
     @GetMapping("/move")
-    public String moveTask(@RequestParam(value = "id") int id, @RequestParam(value = "position") int position, @RequestParam(value = "list") String list) {
+    public void moveTask(@RequestParam(value = "id") int id, @RequestParam(value = "position") int position, @RequestParam(value = "list") String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
-
+        assert board != null;
         // Copying contents of old task to new task and deleting old task
         Task t = taskRepository.findById(id);
 
-        Task t1 = new Task(t.getName(), t.getDescription(), t.isDefinitionOfDone(), t.isComplete(), t.getProgress());
+        Task t1 = new Task(t.getName(), t.getDescription(), t.isDefinitionOfDone(), t.getProgress());
         t1.setComments(t.getComments());
         t1.setPosition(position);
+        t1.setTodos(t.getTodos());
+
+        boolean voted = t.getUsersVoted().contains(user);
 
         // Adding new task to specified list in specified position
         switch(list) {
@@ -239,7 +272,6 @@ public class TaskController {
             case "complete-list":
                 if (t.getProgress() != 100) {
                     taskRepository.delete(t1);
-                    return "failure";
                 }
                 for(int i=position; i<board.getComplete().size(); i++) {
                     board.getComplete().get(i).setPosition(i+1);
@@ -250,7 +282,11 @@ public class TaskController {
         }
         boardRepository.save(board);
 
-        return "success";
+        if (voted) {
+            t1.getUsersVoted().add(user);
+            user.getVotedTasks().add(t1);
+            userRepository.save(user);
+        }
     }
 
     @GetMapping("/date")

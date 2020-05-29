@@ -1,131 +1,159 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Sebastian Adamo
+  Date: 5/24/2020
+  Time: 1:01 PM
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>${board.name} - Sprint</title>
     <meta charset="UTF-8">
+    <title>Tasks - Sprint</title>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
     <link type="text/css" href="../../../resources/style/theme.css" rel="stylesheet">
-    <link type="text/css" href="../../../resources/style/tasks.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 
+    <!-- jQuery -->
     <script
             src="https://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
             crossorigin="anonymous">
     </script>
+    <!-- jQuery UI -->
     <script
             src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
             integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
             crossorigin="anonymous">
     </script>
+    <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous">
-
     </script>
+    <!-- Bootstrap -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous">
     </script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <!-- Tether JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <!-- Bootstrap Datepicker -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
 
-<%--    Sortable JS--%>
+    <!-- Sortable JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.10.1/Sortable.min.js"
             integrity="sha256-9D6DlNlpDfh0C8buQ6NXxrOdLo/wqFUwEB1s70obwfE="
             crossorigin="anonymous">
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
-            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI="
-            crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+    <script src="<c:url value="/resources/scripts/main.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/tasks-task-overlay.js"/>"></script>
 </head>
 <body>
 <div class="page-wrapper chiller-theme">
+    <!-- Sidebar -->
     <nav id="sidebar" class="sidebar-wrapper">
         <div class="sidebar-content">
             <div class="sidebar-brand">
-                <a href="#">Sprint</a>
+                <a href="${pageContext.request.contextPath}/dashboard">Sprint</a>
             </div>
+            <!-- Dashboard Navigation -->
             <div class="sidebar-menu">
                 <ul>
                     <li class="header-menu">
-                        <span>Board</span>
+                        <span>NAVIGATION</span>
                     </li>
                     <li>
-                        <a href="#" onclick="tasks()">
-                            <i class="fa fa-tasks"></i>
-                            <span>Tasks</span>
+                        <a  href="${pageContext.request.contextPath}/dashboard">
+                            <i class="fa fa-home"></i>
+                            <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" onclick="polls()">
-                            <i class="fa fa-chart-bar"></i>
-                            <span>Polls</span>
+                        <a  href="${pageContext.request.contextPath}/dashboard">
+                            <i class="fa fa-th-list"></i>
+                            <span>My Boards</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" onclick="documents()">
-                            <i class="fa fa-book"></i>
-                            <span>Documents</span>
-                        </a>
-                    </li>
-                    <li class="header-menu">
-                        <span>Social</span>
-                    </li>
-                    <li>
-                        <a href="#" onclick="$('#new-comment').val('')" data-toggle="modal" data-target="#activity-modal">
-                            <i class="fa fa-comment"></i>
-                            <span>Activity</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#users-modal">
+                        <a  href="${pageContext.request.contextPath}/dashboard">
                             <i class="fa fa-users"></i>
-                            <span>Users</span>
+                            <span>Teams</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a  href="${pageContext.request.contextPath}/dashboard">
+                            <i class="fa fa-calendar"></i>
+                            <span>Calendar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a  href="${pageContext.request.contextPath}/dashboard">
+                            <i class="fa fa-cog"></i>
+                            <span>Settings</span>
                         </a>
                     </li>
                 </ul>
             </div>
+            <!-- !Dashboard Navigation -->
+
+            <!-- Recent Boards -->
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>RECENT BOARDS</span>
+                    </li>
+                    <c:forEach items="${user.recentBoards}" var="recentBoard">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/tasks?id=${recentBoard.id}">
+                                <i class="fa fa-th-list"></i>
+                                <span>${recentBoard.name}</span>
+                            </a>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </div>
+            <!-- !Recent Boards -->
         </div>
     </nav>
+    <!-- !Sidebar -->
+
+    <!-- Main Wrapper -->
     <main class="page-content">
+        <!-- Navbar -->
         <nav id="navbar" class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <!-- Sidebar -->
+            <!-- Logo -->
             <a style="padding-top: 25px;" id="logo" class="navbar-brand" href="${pageContext.request.contextPath}/dashboard"><img src="<c:url value="/resources/images/logo.svg"/>" style="width: 120px; height: 60px;" alt="logo"/></a>
-            <!-- Links -->
+            <!-- !Logo -->
+            <!-- Left Side -->
             <ul class="navbar-nav">
-                <!-- Home -->
+                <!-- Menu -->
                 <li class="nav-item">
-                    <a id="show-sidebar" class="nav-link" href="#" onclick="toggleSidebar()"><i class="material-icons">menu</i></a>
+                    <a id="show-sidebar" class="nav-link" onclick="toggleSidebar()"><i class="material-icons">menu</i></a>
                 </li>
+                <!-- !Menu -->
+                <!-- Home -->
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/dashboard"><i class="material-icons">home</i></a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" id="navbardrop" data-toggle="dropdown">
-                        <i class="material-icons">apps</i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-left">
-                        <a class="dropdown-header">Boards</a>
-                        <div class="dropdown-divider"></div>
-                        <c:forEach items="${boards}" var="board">
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/tasks?id=${board.id}">${board.name}</a>
-                        </c:forEach>
-                    </div>
-                </li>
+                <!-- !Home -->
             </ul>
-
-            <!-- Right Bar -->
+            <!-- !Left Side -->
+            <!-- Right Side -->
             <ul class="navbar-nav ml-auto">
+                <!-- Notifications -->
                 <li id="notifications-dropdown" class="nav-item dropdown">
                     <a class="nav-link" href="#" id="notifications" data-toggle="dropdown">
                         <i class="material-icons">notifications</i>
@@ -147,6 +175,7 @@
                         <a data-toggle="modal" data-target="#notification-modal" class="dropdown-item">View all notifications</a>
                     </div>
                 </li>
+                <!-- !Notifications -->
                 <!-- User -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" id="navbardrop" data-toggle="dropdown">
@@ -155,668 +184,467 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-header">Account</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/account">Edit Details</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard">Edit Details</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/account">Settings</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a>
                     </div>
                 </li>
+                <!-- !User -->
             </ul>
+            <!-- !Right Side -->
         </nav>
-
-
+        <!-- !Navbar -->
+        <!-- Main Content -->
         <div id="content-container" class="container-fluid">
 
             <div id="list-row" class="row">
-
-                <div style="height: 900px"  class="col-lg-3">
-                    <div class="lists" id="backlog-list-wrapper">
-                        <span class="list-header">Backlog</span>
-                        <div class="sortable-list">
+                <!-- Backlog List -->
+                <div style="height: 750px" class="col-lg-3">
+                    <div style="padding-bottom: 0; margin-bottom: 0; padding-top: 0;" class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                            <h1 style="text-align: center" class="display-4">Backlog</h1>
+                        </div>
+                        <div class="lists">
                             <ul id="backlog-list" class="ul-list">
-                                <c:forEach items="${board.backlog}" var="backlog">
-                                    <li>
-                                        <c:choose>
-                                            <c:when test="${boardRole.role == 'Product Owner'}">
-                                                <div class="card list-card" onmousedown="getTaskId('${backlog.id}')">
-                                                    <div class="card-body" onclick="taskOverlayOn('${backlog.id}')">
-                                                        <p class="card-text">${backlog.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${backlog.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-<%--                                                        <i class="material-icons task-icons" onclick="getDependencies('${backlog.id}', 'Backlog')" data-toggle="modal" data-target="#dependencies-modal">timeline</i>--%>
-                                                        <i class="material-icons task-icons" onclick="deleteTask('${backlog.id}')">delete_outline</i>
+                                <c:forEach items="${board.backlog}" var="task">
+                                    <li style="padding-left: 7.5%; padding-top: 5%">
+                                        <div onmouseover="setMoveTaskId('${task.id}')" style="width: 90%; height: 25%" class="card list-card boards-card">
+                                            <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="#task-modal" rel="modal:open" onclick="getTaskDetails(${task.id}); getTaskProgress(); getTaskActivity()">
+                                                <div style="height: 75%; text-align: center; padding-top: 4rem" class="card-body">
+                                                    <p class="card-text">${task.name}</p>
+                                                    <div class="progress md-progress" style="width: 80%;height: 10px; margin-top: 1rem; margin-left: 10%">
+                                                        <div id="task-card-progress-bar" class="progress-bar" role="progressbar" style="width: ${task.progress}%; height: 20px; background-color: #66bb6a" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
-                                            </c:when>
-                                            <c:when test="${boardRole.role == 'Scrum Master'}">
-                                                <div class="card list-card" onmousedown="getTaskId('${backlog.id}')">
-                                                    <div class="card-body" onclick="taskOverlayOn('${backlog.id}')">
-                                                        <p class="card-text">${backlog.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${backlog.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <i class="material-icons task-icons" onclick="deleteTask('${backlog.id}')">delete_outline</i>
-                                                    </div>
-                                                </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                            <div class="card list-card" onmousedown="getTaskId('${backlog.id}')">
-                                                <div class="card-body" onclick="taskOverlayViewOnly('${backlog.id}')">
-                                                    <p class="card-text">${backlog.name}</p>
-                                                    <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                        <div class="progress-bar" role="progressbar" style="width: ${backlog.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
+                                            </a>
+                                            <div class="card-footer">
+                                                <c:choose>
+                                                    <c:when test="${task.usersVoted.contains(user)}">
+                                                        <i class="material-icons" style="color: #66bb6a; float: left;" onclick="unvoteTask('${task.id}')">thumb_up</i>
+                                                        <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <i class="material-icons" style="float: left" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <i class="material-icons" style="float: right"  onclick="deleteTask('${task.id}')">delete</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                            <div style="margin: 10%; width: 81.5%; height: 10%; " class="card list-card">
+                                <div style="text-align: center;" class="card-body">
+                                    <input class="new-card-box" placeholder="Enter new task" id="new-backlog-task" type="text" onfocusout="addTask('backlog')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- !Backlog List -->
+
+                <!-- TODO List -->
+                <div style="height: 750px" class="col-lg-3">
+                    <div class="container">
+                        <h1 style="text-align: center" class="display-4">TODO</h1>
+                    </div>
+                    <div class="lists">
+                        <ul id="todo-list" class="ul-list">
+                            <c:forEach items="${board.todo}" var="task">
+                                <li style="padding-left: 7.5%; padding-top: 5%">
+                                    <div onmouseover="setMoveTaskId('${task.id}')" style="width: 90%; height: 25%" class="card list-card boards-card">
+                                        <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="#task-modal" rel="modal:open" onclick="getTaskDetails(${task.id}); getTaskProgress(); getTaskActivity()">
+                                            <div style="height: 75%; text-align: center; padding-top: 4rem" class="card-body">
+                                                <p class="card-text">${task.name}</p>
+                                                <div class="progress md-progress" style="width: 80%;height: 10px; margin-top: 1rem; margin-left: 10%">
+                                                    <div id="task-card-progress-bar" class="progress-bar" role="progressbar" style="width: ${task.progress}%; height: 20px; background-color: #66bb6a" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </li>
-                                </c:forEach>
-                            </ul>
+                                        </a>
+                                        <div class="card-footer">
+                                            <c:choose>
+                                                <c:when test="${task.usersVoted.contains(user)}">
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="unvoteTask('${task.id}')">thumb_up</i>
+                                                    <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="material-icons" style="float: left" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <i class="material-icons" style="float: right" onclick="deleteTask('${task.id}')">delete</i>
+                                        </div>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                        <div style="margin: 10%; width: 81.5%; height: 10%; " class="card list-card">
+                            <div style="text-align: center;" class="card-body">
+                                <input class="new-card-box" placeholder="Enter new task" id="new-todo-task" type="text" onfocusout="addTask('todo')">
+                            </div>
                         </div>
-                        <c:choose>
-                            <c:when test="${boardRole.role == 'Product Owner'}">
-                                <div class="card list-card">
-                                    <div style="text-align: center;" class="card-body">
-                                        <input class="new-card-box" placeholder="Enter new task" id="new-backlog-task" type="text" onfocusout="addToBacklog()">
-                                    </div>
-                                </div>
-                            </c:when>
-                            <c:when test="${boardRole.role == 'Scrum Master'}">
-                                <div class="card list-card">
-                                    <div style="text-align: center;" class="card-body">
-                                        <input class="new-card-box" placeholder="Enter new task" id="new-backlog-task" type="text" onfocusout="addToBacklog()">
-                                    </div>
-                                </div>
-                            </c:when>
-                        </c:choose>
                     </div>
                 </div>
+                <!-- !TODO List -->
 
-                <div style="height: 900px" class="col-lg-3">
-                    <div class="lists" id="todo-list-wrapper">
-                        <span class="list-header">TODO</span>
-                        <div id="todo-list-container" class="sortable-list">
-                            <ul id="todo-list" class="ul-list">
-                                <c:forEach items="${board.todo}" var="todo">
-                                    <li>
-                                        <c:choose>
-                                            <c:when test="${boardRole.role == 'Product Owner'}">
-                                                <div class="card list-card" onmousedown="getTaskId('${todo.id}')">
-                                                    <div class="card-body" onclick="taskOverlayOn('${todo.id}')">
-                                                        <p class="card-text">${todo.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${todo.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <i class="material-icons task-icons" onclick="deleteTask('${todo.id}')">delete_outline</i>
-                                                    </div>
+                <!-- In Progress List -->
+                <div style="height: 750px" class="col-lg-3">
+                    <div class="container">
+                        <h1 style="text-align: center" class="display-4">In Progress</h1>
+                    </div>
+                    <div class="lists">
+                        <ul id="inprogress-list" class="ul-list">
+                            <c:forEach items="${board.inprogress}" var="task">
+                                <li style="padding-left: 7.5%; padding-top: 5%">
+                                    <div onmouseover="setMoveTaskId('${task.id}')" style="width: 90%; height: 25%" class="card list-card boards-card">
+                                        <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="#task-modal" rel="modal:open" onclick="getTaskDetails(${task.id}); getTaskProgress(); getTaskActivity()">
+                                            <div style="height: 75%; text-align: center; padding-top: 4rem" class="card-body">
+                                                <p class="card-text">${task.name}</p>
+                                                <div class="progress md-progress" style="width: 80%;height: 10px; margin-top: 1rem; margin-left: 10%">
+                                                    <div id="task-card-progress-bar" class="progress-bar" role="progressbar" style="width: ${task.progress}%; height: 20px; background-color: #66bb6a" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
-                                            </c:when>
-                                            <c:when test="${boardRole.role == 'Scrum Master'}">
-                                                <div class="card list-card" onmousedown="getTaskId('${todo.id}')">
-                                                    <div class="card-body" onclick="taskOverlayOn('${todo.id}')">
-                                                        <p class="card-text">${todo.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${todo.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <i class="material-icons task-icons" onclick="deleteTask('${todo.id}')">delete_outline</i>
-                                                    </div>
-                                                </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="card list-card" onmousedown="getTaskId('${todo.id}')">
-                                                    <div class="card-body" onclick="taskOverlayViewOnly('${todo.id}')">
-                                                        <p class="card-text">${todo.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${todo.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </li>
-                                </c:forEach>
-                            </ul>
+                                            </div>
+                                        </a>
+                                        <div class="card-footer">
+                                            <c:choose>
+                                                <c:when test="${task.usersVoted.contains(user)}">
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="unvoteTask('${task.id}')">thumb_up</i>
+                                                    <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="material-icons" style="float: left" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <i class="material-icons" style="float: right" onclick="deleteTask('${task.id}')">delete</i>
+                                        </div>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                        <div style="margin: 10%; width: 81.5%; height: 10%; " class="card list-card">
+                            <div style="text-align: center;" class="card-body">
+                                <input class="new-card-box" placeholder="Enter new task" id="new-inprogress-task" type="text" onfocusout="addTask('inprogress')">
+                            </div>
                         </div>
-                        <c:choose>
-                            <c:when test="${boardRole.role == 'Product Owner'}">
-                                <div class="card list-card">
-                                    <div style="text-align: center;" class="card-body">
-                                        <input class="new-card-box" placeholder="Enter new task" id="new-todo-task" type="text" onfocusout="addToTodo()">
-                                    </div>
-                                </div>
-                            </c:when>
-                            <c:when test="${boardRole.role == 'Scrum Master'}">
-                                <div class="card list-card">
-                                    <div style="text-align: center;" class="card-body">
-                                        <input class="new-card-box" placeholder="Enter new task" id="new-todo-task" type="text" onfocusout="addToTodo()">
-                                    </div>
-                                </div>
-                            </c:when>
-                        </c:choose>
                     </div>
                 </div>
+                <!-- !In Progress List -->
 
-                <div style="height: 900px" class="col-lg-3">
-                    <div class="lists" id="inprogress-list-wrapper">
-                        <span class="list-header">In Progress</span>
-                        <div class="sortable-list">
-                            <ul id="inprogress-list" class="ul-list">
-                                <c:forEach items="${board.inprogress}" var="inprogress">
-                                    <li>
-                                        <c:choose>
-                                            <c:when test="${boardRole.role == 'Product Owner'}">
-                                                <div class="card list-card" onmousedown="getTaskId('${inprogress.id}')">
-                                                    <div class="card-body" onclick="taskOverlayOn('${inprogress.id}')">
-                                                        <p class="card-text">${inprogress.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${inprogress.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <i class="material-icons task-icons" onclick="deleteTask('${inprogress.id}')">delete_outline</i>
-                                                    </div>
+                <!-- Complete List -->
+                <div style="height: 750px" class="col-lg-3">
+                    <div class="container">
+                        <h1 style="text-align: center" class="display-4">Complete</h1>
+                    </div>
+                    <div class="lists">
+                        <ul id="complete-list" class="ul-list">
+                            <c:forEach items="${board.complete}" var="task">
+                                <li style="padding-left: 7.5%; padding-top: 5%">
+                                    <div onmouseover="setMoveTaskId('${task.id}')" style="width: 90%; height: 25%" class="card list-card boards-card">
+                                        <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="#task-modal" rel="modal:open" onclick="getTaskDetails(${task.id}); getTaskProgress(); getTaskActivity()">
+                                            <div style="height: 75%; text-align: center; padding-top: 4rem" class="card-body">
+                                                <p class="card-text">${task.name}</p>
+                                                <div class="progress md-progress" style="width: 80%;height: 10px; margin-top: 1rem; margin-left: 10%">
+                                                    <div class="progress-bar" role="progressbar" style="width: ${task.progress}%; height: 20px; background-color: #66bb6a" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
-                                            </c:when>
-                                            <c:when test="${boardRole.role == 'Scrum Master'}">
-                                                <div class="card list-card" onmousedown="getTaskId('${inprogress.id}')">
-                                                    <div class="card-body" onclick="taskOverlayOn('${inprogress.id}')">
-                                                        <p class="card-text">${inprogress.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${inprogress.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <i class="material-icons task-icons" onclick="deleteTask('${inprogress.id}')">delete_outline</i>
-                                                    </div>
-                                                </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="card list-card" onmousedown="getTaskId('${inprogress.id}')">
-                                                    <div class="card-body" onclick="taskOverlayViewOnly('${inprogress.id}')">
-                                                        <p class="card-text">${inprogress.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${inprogress.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </li>
-                                </c:forEach>
-                            </ul>
+                                            </div>
+                                        </a>
+                                        <div class="card-footer">
+                                            <c:choose>
+                                                <c:when test="${task.usersVoted.contains(user)}">
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="unvoteTask('${task.id}')">thumb_up</i>
+                                                    <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="material-icons" style="float: left" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <i class="material-icons" style="float: right"  onclick="deleteTask('${task.id}')">delete</i>
+                                        </div>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                        <div style="margin: 10%; width: 81.5%; height: 10%; " class="card list-card">
+                            <div style="text-align: center;" class="card-body">
+                                <input class="new-card-box" placeholder="Enter new task" id="new-complete-task" type="text" onfocusout="addTask('complete')">
+                            </div>
                         </div>
-                        <c:choose>
-                            <c:when test="${boardRole.role == 'Product Owner'}">
-                                <div class="card list-card">
-                                    <div style="text-align: center;" class="card-body">
-                                        <input class="new-card-box" placeholder="Enter new task" id="new-inprogress-task" type="text" onfocusout="addToInprogress()">
-                                    </div>
-                                </div>
-                            </c:when>
-                            <c:when test="${boardRole.role == 'Scrum Master'}">
-                                <div class="card list-card">
-                                    <div style="text-align: center;" class="card-body">
-                                        <input class="new-card-box" placeholder="Enter new task" id="new-inprogress-task" type="text" onfocusout="addToInprogress()">
-                                    </div>
-                                </div>
-                            </c:when>
-                        </c:choose>
                     </div>
                 </div>
-
-                <div style="height: 900px"  class="col-lg-3">
-                    <div class="lists" id="complete-list-wrapper">
-                        <span class="list-header">Complete</span>
-                        <div class="sortable-list">
-                            <ul id="complete-list" class="ul-list">
-                                <c:forEach items="${board.complete}" var="complete">
-                                    <li>
-                                        <c:choose>
-                                            <c:when test="${boardRole.role == 'Product Owner'}">
-                                                <div class="card list-card" onmousedown="getTaskId('${complete.id}')">
-                                                    <div class="card-body" onclick="taskOverlayOn('${complete.id}')">
-                                                        <p class="card-text">${complete.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${complete.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <i class="material-icons task-icons" onclick="deleteTask('${complete.id}')">delete_outline</i>
-                                                    </div>
-                                                </div>
-                                            </c:when>
-                                            <c:when test="${boardRole.role == 'Scrum Master'}">
-                                                <div class="card list-card" onmousedown="getTaskId('${complete.id}')">
-                                                    <div class="card-body" onclick="taskOverlayOn('${complete.id}')">
-                                                        <p class="card-text">${complete.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${complete.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <i class="material-icons task-icons" onclick="deleteTask('${complete.id}')">delete_outline</i>
-                                                    </div>
-                                                </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="card list-card" onmousedown="getTaskId('${complete.id}')">
-                                                    <div class="card-body" onclick="taskOverlayViewOnly('${complete.id}')">
-                                                        <p class="card-text">${complete.name}</p>
-                                                        <div class="progress md-progress" style="height: 20px; margin-top: 1rem">
-                                                            <div class="progress-bar" role="progressbar" style="width: ${complete.progress}%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-                        </div>
-                        <c:choose>
-                            <c:when test="${boardRole.role == 'Product Owner'}">
-                                <div class="card list-card">
-                                    <div style="text-align: center;" class="card-body">
-                                        <input class="new-card-box" placeholder="Enter new task" id="new-complete-task" type="text" onfocusout="addToComplete()">
-                                    </div>
-                                </div>
-                            </c:when>
-                            <c:when test="${boardRole.role == 'Scrum Master'}">
-                                <div class="card list-card">
-                                    <div style="text-align: center;" class="card-body">
-                                        <input class="new-card-box" placeholder="Enter new task" id="new-complete-task" type="text" onfocusout="addToComplete()">
-                                    </div>
-                                </div>
-                            </c:when>
-                        </c:choose>
-                    </div>
-                </div>
+                <!-- !Complete List -->
             </div>
-        </div>
 
-        <%--            Task Overlay--%>
-        <div id="task-overlay">
-            <div id="task-overlay-container" class="friend-overlay">
-                <div style="align-content: center" class="friend-overlay-contents">
-                    <div style="text-align: right; margin-bottom: 10px;">
-                        <i class="material-icons" onclick="taskOverlayOff()">close</i>
-                    </div>
-                    <div class="tab-content" id="task-overlay-tab-content">
-                        <div class="tab-pane fade show active" id="task-details" role="tabpanel" aria-labelledby="task-details-tab">
+                <!-- Task Modal -->
+                <div style="width: 70%; height: 77.5% !important;" id="task-modal" class="modal">
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="task-details-tab" data-toggle="tab" href="#task-details" role="tab" aria-controls="home" aria-selected="true"><i class="material-icons">notes</i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a onclick="getTaskProgress()" class="nav-link" id="task-progress-tab" data-toggle="tab" href="#task-progress" role="tab" aria-controls="profile" aria-selected="false"><i class="material-icons">done_all</i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a onclick="getTaskActivity()" class="nav-link" id="task-comments-tab" data-toggle="tab" href="#task-comments" role="tab" aria-controls="profile" aria-selected="false"><i class="material-icons">share</i></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- Task Details -->
+                        <div class="tab-pane fade show active" id="task-details" role="tabpanel" aria-labelledby="task-details-tab-tab">
                             <div class="form-container">
-                                <div id="card-overlay-taskid" style="display: none;"></div>
-                                <form style="padding-top: 0 !important;" class="text-center p-5">
-                                    <label for="task-overlay-name">Name</label>
-                                    <input onfocusout="saveTask()" style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="task-overlay-name" class="form-control mb-4" name="name">
+                                <form style="padding-top: 1rem !important;" id="task-details-form" class="text-center p-5">
+                                    <label for="task-name">Name</label>
+                                    <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="task-name" class="form-control mb-4" onfocusout="saveTaskName()" placeholder="Enter a name...">
                                     <div style="margin-top: 8px;" class="form-group">
-                                        <label for="task-overlay-description">Description</label>
-                                        <textarea onfocusout="saveTask()" style="resize: none" class="form-control rounded-0" id="task-overlay-description" rows="3" placeholder="Enter a description..." name="description"></textarea>
+                                        <label for="task-description">Description</label>
+                                        <textarea class="form-control rounded-0" id="task-description" rows="3" name="description" placeholder="Enter a description..." onfocusout="saveTaskDescription()"></textarea>
                                     </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="task-overlay-dod" onclick="saveTask()">
-                                        <label class="custom-control-label" for="task-overlay-dod">Definition of Done</label>
+                                    <div class="round">
+                                        <input type="checkbox" id="task-dod"/>
+                                        <label onclick="updateDod()" for="task-dod"></label>
+                                        <span style="float: left; margin-left: 2.5rem; padding-top: 3px">Definition of Done</span>
                                     </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="task-overlay-complete" onclick="saveTask()">
-                                        <label class="custom-control-label" for="task-overlay-complete">Complete</label>
+                                    <label for="task-due-date">Due Date</label>
+                                    <div class="input-append date form_datetime">
+                                        <input id="task-due-date" style="width: 70%; margin-left: 15%" class="form-control" name="date" placeholder="Enter a due date..." type="text" onchange="setTaskDueDate()"/>
                                     </div>
-                                    <div class="progress md-progress" style="height: 20px; margin-top: 1rem; margin-bottom: 1rem;">
+                                </form>
+                            </div>
+                        </div>
+                        <!-- !Task Details -->
+                        <!-- Task Progress -->
+                        <div class="tab-pane fade" id="task-progress" role="tabpanel" aria-labelledby="task-progress-tab" >
+                            <div class="form-container">
+                                <form style="padding-top: 1rem !important; padding-bottom: 0 !important;" id="task-progress-form" class="text-center p-5">
+                                    <label style="padding-top: 1rem" for="task-progress-bar">Progress</label>
+                                    <div class="progress md-progress" style="width: 350px;height: 20px; margin-top: 1rem; margin-bottom: 1rem;">
                                         <div id="task-progress-bar" class="progress-bar" role="progressbar" style="width: 25%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
                                     </div>
-                                    <div style="margin-bottom: 1rem" class="input-append date form_datetime">
-                                        <input id="due-date" style="width: 70%; margin-left: 15%" class="form-control" name="date" placeholder="Enter due date" type="text" onchange="setTaskDueDate()"/>
-                                    </div>
-                                    <label for="task-new-comment">Activity</label>
-                                    <textarea style="resize: none; text-align: left; height: 38px;" class="form-control rounded-0" id="task-new-comment" rows="1" placeholder="Add a comment..." name="comment"></textarea>
-                                    <button style="background-color: #31353D !important; border-color: #31353D !important; margin: 1rem;" type="button" class="btn btn-primary" onclick="commentOnTask()">Comment</button>
-                                    <div style="padding: 0" class="modal-body">
-                                        <div class="actionBox">
-                                            <ul id="task-comment-list" class="commentList">
-                                                <%--                                                COMMENTS APPENDED HERE--%>
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<%--        Task Overlay View Only--%>
-        <div id="task-overlay-view-only">
-            <div id="task-overlay-view-only-container" class="friend-overlay">
-                <div style="align-content: center" class="friend-overlay-contents">
-                    <div style="text-align: right; margin-bottom: 10px;">
-                        <i class="material-icons" onclick="taskOverlayViewOnlyOff()">close</i>
-                    </div>
-                    <div class="tab-content" id="task-overlay-vo-tab-content">
-                        <div class="tab-pane fade show active" id="task-vo-details" role="tabpanel" aria-labelledby="task-vo-details-tab">
-                            <div class="form-container">
-                                <div id="card-overlay-vo-taskid" style="display: none;"></div>
-                                <form style="padding-top: 0 !important;" class="text-center p-5">
-                                    <label for="task-overlay-vo-name">Name</label>
-                                    <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="task-overlay-vo-name" class="form-control mb-4" name="name" readonly>
-                                    <div style="margin-top: 8px;" class="form-group">
-                                        <label for="task-overlay-vo-description">Description</label>
-                                        <textarea style="resize: none" class="form-control rounded-0" id="task-overlay-vo-description" rows="3" placeholder="Enter a description..." name="description" readonly></textarea>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="task-overlay-vo-dod" onclick="return false;">
-                                        <label class="custom-control-label" for="task-overlay-vo-dod">Definition of Done</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="task-overlay-vo-complete" onclick="return false;">
-                                        <label class="custom-control-label" for="task-overlay-vo-complete">Complete</label>
-                                    </div>
-                                    <div class="progress md-progress" style="height: 20px; margin-top: 1rem; margin-bottom: 1rem;">
-                                        <div id="task-progress-vo-bar" class="progress-bar" role="progressbar" style="width: 25%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                                    </div>
-                                    <div style="margin-bottom: 1rem" class="input-append date form_datetime">
-                                        <input id="due-date-vo" style="width: 70%; margin-left: 15%" class="form-control" name="date" placeholder="Enter due date" type="text" readonly/>
-                                    </div>
-                                    <label for="task-vo-new-comment">Activity</label>
-                                    <textarea style="resize: none; text-align: left; height: 38px;" class="form-control rounded-0" id="task-vo-new-comment" rows="1" placeholder="Add a comment..." name="comment"></textarea>
-                                    <button style="background-color: #31353D !important; border-color: #31353D !important; margin: 1rem;" type="button" class="btn btn-primary" onclick="commentOnTaskViewOnly()">Comment</button>
-                                    <div style="padding: 0" class="modal-body">
-                                        <div class="actionBox">
-                                            <ul id="task-vo-comment-list" class="commentList">
-                                                <%--                                                COMMENTS APPENDED HERE--%>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<%--Polls--%>
-        <div style="display:none;" id="poll-row"  class="container-fluid">
-            <div class="row">
-                <div style="height: 900px"  class="col-lg-6">
-                    <div class="lists" id="polls-list-wrapper">
-                        <div class="form-container">
-                            <div style="margin-bottom: 0; padding-bottom: 0" class="jumbotron jumbotron-fluid">
-                                <div class="container">
-                                    <h1 class="display-4">View Polls</h1>
-                                </div>
-                            </div>
-                            <ul style="margin-top: 3rem" id="poll-list" class="ul-list">
-                                <c:forEach items="${board.polls}" var="poll">
-                                    <div style="width: 50%; margin-left: 25%" class="card list-card">
-                                        <c:choose>
-                                            <c:when test="${poll.voters.contains(user)}">
-                                                <div class="card-body" onclick="getResults('${poll.id}')">
-                                                    <p class="card-text">${poll.question}</p>
-                                                </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="card-body" onclick="getPoll('${poll.id}')" data-toggle="modal" data-target="#poll-modal">
-                                                    <p class="card-text">${poll.question}</p>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                        <c:if test="${poll.creator == user}">
-                                            <div class="card-footer">
-                                                <i class="material-icons task-icons" onclick="getResults('${poll.id}')">bar_chart</i>
-                                                <i class="material-icons task-icons" onclick="deletePoll('${poll.id}')">delete_outline</i>
+                                <div style="padding: 0" class="modal-body">
+                                    <ul style="list-style: none" id="task-todo-list">
+                                        <!-- TODO list appended here -->
+                                    </ul>
+                                    <ul style="list-style: none">
+                                        <li>
+                                            <div style="padding-left: 2.3rem" class="round">
+                                                <input style="margin-bottom: 10px !important; margin-top: 3rem; width: 350px;" type="text" id="new-task-todo" class="form-control mb-4" placeholder="Add a new TODO" onfocusout="addTaskTodo()">
                                             </div>
-                                        </c:if>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- !Task Progress -->
+                        <!-- Task Activity -->
+                        <div class="tab-pane fade" id="task-comments" role="tabpanel" aria-labelledby="task-comments-tab" >
+                            <div class="form-container">
+                                <form style="padding-top: 1rem !important; padding-bottom: 0 !important;" id="task-activity-form" class="text-center">
+                                    <label for="task-activity-comment">Activity</label>
+                                    <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 500px;" type="text" id="task-activity-comment" class="form-control mb-4" placeholder="Add a comment...">
+                                    <button id="add-task-comment" style="background: #31353D; border-color: #31353D; width: 25%; margin-left: 75%" class="btn btn-info btn-block" type="button" onclick="addTaskComment()">Comment</button>
+                                </form>
+                                <div style="padding: 0" class="modal-body">
+                                    <div class="actionBox">
+                                        <ul id="task-comment-list" class="commentList">
+
+                                        </ul>
                                     </div>
-                                </c:forEach>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div style="height: 900px"  class="col-lg-6">
-                    <div class="lists" id="create-polls-wrapper">
-                        <div class="form-container">
-                            <div style="margin-bottom: 0; padding-bottom: 0" class="jumbotron jumbotron-fluid">
-                                <div class="container">
-                                    <h1 class="display-4">Create a Poll</h1>
-                                </div>
-                            </div>
-                            <form id="account-form" class="text-center p-5">
-                                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="create-poll-question" class="form-control mb-4" placeholder="Enter your question">
-                                <select  id="create-poll-select" style="margin-top: .5rem; margin-bottom: 2rem" class="browser-default custom-select">
-                                    <option selected>Choose from lists</option>
-                                    <option value="Backlog">Backlog</option>
-                                    <option value="TODO">TODO</option>
-                                    <option value="In Progress">In Progress</option>
-                                </select>
-
-<%--                                <div style="padding: 0" class="jumbotron jumbotron-fluid">--%>
-<%--                                    <div class="container">--%>
-<%--                                        <p class="lead">Or</p>--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-
-<%--                                <input style="margin-bottom: 14px !important; margin-top: 8px;" type="text" id="create-poll-o" class="form-control mb-4" placeholder="Enter poll option">--%>
-<%--                                <input style="margin-bottom: 14px !important; margin-top: 8px;" type="text" id="create-poll-o1" class="form-control mb-4" placeholder="Enter poll option">--%>
-
-                                <button style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createPoll()">Create</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<%--        Vote Modal--%>
-        <div class="modal fade" id="poll-modal" tabindex="-1" role="dialog" aria-labelledby="poll-modal" aria-hidden="true" data-backdrop="true">
-            <span style="display: none" id="poll-id"></span>
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 id="poll-question" style="text-align: center; word-wrap: break-word; width: 95% !important;" class="modal-title w-100">Results</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div style="padding: 0; min-height: 400px;" class="modal-body">
-                        <div class="actionBox">
-                            <ul id="choices-list" class="ul-list">
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                    <span id="poll-view-results" class="date sub-text" onclick="results()" data-toggle="modal" data-target="results-modal">
-                        View Results
-                    </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<%--        Results Modal--%>
-        <div class="modal fade" id="results-modal" tabindex="-1" role="dialog" aria-labelledby="results-modal" aria-hidden="true" data-backdrop="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 id="results-question" style="text-align: center; word-wrap: break-word; width: 95% !important;" class="modal-title w-100">Poll</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="chart-container" class="actionBox">
-<%--                            CHART HERE--%>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<%--        Documents--%>
-        <div style="display:none;" id="document-row"  class="container-fluid">
-            <div class="row">
-                <div style="height: 900px"  class="col-lg-12">
-                    <div class="lists" id="document-list-wrapper">
-                        <div class="form-container">
-                            <div style="margin-bottom: 0; padding-bottom: 0" class="jumbotron jumbotron-fluid">
-                                <div class="container">
-                                    <h1 class="display-4">Documents</h1>
-                                    <p class="lead">Coming soon.</p>
                                 </div>
                             </div>
                         </div>
+                        <!-- !Task Activity -->
                     </div>
                 </div>
-            </div>
+                <!-- !Task Modal -->
         </div>
-
-<%--        Activity--%>
-        <div class="modal fade" id="activity-modal" tabindex="-1" role="dialog" aria-labelledby="activity-modal" aria-hidden="true" data-backdrop="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 style="text-align: center" class="modal-title w-100">Activity</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div style="padding: 0" class="modal-body">
-                        <div class="actionBox">
-                            <ul id="comment-list" class="commentList">
-                                <c:forEach items="${board.comments}" var="comment">
-                                    <li>
-                                        <div class="commenterImage">
-                                            <i class="material-icons">account_circle</i>
-                                        </div>
-                                        <div class="commentText">
-                                            <p style="word-break: break-word" class="">${comment.description}</p>
-                                            <span class="date sub-text">
-                                            <p>${comment.username}</p>
-                                                ${comment.formattedDate}
-                                            </span>
-                                        </div>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <textarea style="resize: none; text-align: left; height: 38px;" class="form-control rounded-0" id="new-comment" rows="1" placeholder="Add a comment..." name="comment"></textarea>
-                        <button style="background-color: #31353D !important; border-color: #31353D !important;" type="button" class="btn btn-primary" onclick="commentOnBoard()">Comment</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<%--        Users--%>
-        <div class="modal fade bd-example-modal-lg" id="users-modal" tabindex="-1" role="dialog" aria-labelledby="users-modal"
-             aria-hidden="true" data-backdrop="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div style="max-height: 600px; min-height: 600px;" class="modal-content">
-                    <input id="board-modal-id" style="display: none" value="${board.id}">
-                    <div class="modal-header">
-                        <h4 style="text-align: center" class="modal-title w-100">Users</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div style="padding: 0" class="modal-body">
-                        <form style="padding-top: 1rem" class="form-inline d-flex justify-content-center md-form form-sm">
-                            <input id="board-modal-search-bar" class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search user email" aria-label="Search">
-                            <i class="fas fa-search" aria-hidden="true" onclick="searchUserTask()"></i>
-                        </form>
-                        <ul style="min-height: 46.6px" id="board-modal-search-list" class="list-group list-group-flush friends-overlay-list">
-                            <%--Results of search are appended here--%>
-                        </ul>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th scope="col">Username</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Role</th>
-                                <th scope="col">Remove</th>
-                            </tr>
-                            </thead>
-                            <tbody id="board-page-table">
-                            <c:forEach items="${boardRoles}" var="boardRole">
-                                <tr>
-                                    <th scope="row" >${boardRole.user.username} <i id="user-name-label" onclick="commentWithUsername('${boardRole.user.username}')" class="material-icons">message</i> </th>
-                                    <td>${boardRole.user.fullname}</td>
-                                    <td>${boardRole.user.email}</td>
-                                    <td>
-                                        <select class="custom-select custom-select-sm">
-                                            <option selected>${boardRole.role}</option>
-                                            <option value="1">Test</option>
-                                        </select>
-                                    </td>
-                                    <c:if test="${board.owner != boardRole.user}">
-                                        <td><i style="padding-left: 25%" class="material-icons" onclick="removeUserTask('${boardRole.user.email}')">delete_outline</i></td>
-                                    </c:if>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<%--        Notifications--%>
-        <div class="modal fade" id="notification-modal" tabindex="-1" role="dialog" aria-labelledby="notification-modal" aria-hidden="true" data-backdrop="true">
-            <div class="modal-dialog" role="document">
-                <div style="min-height: 600px" class="modal-content">
-                    <div class="modal-header">
-                        <h4 style="text-align: center" class="modal-title w-100">Notifications</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div style="padding: 0" class="modal-body">
-                        <div class="actionBox">
-                            <ul id="notification-list" class="commentList">
-                                <c:forEach items="${notifications}" var="notification">
-                                    <li style="display:flex;">
-                                        <div class="commentText">
-                                            <p style="word-break: break-word; font-size: 18px;" class="">${notification.description}</p>
-                                            <c:if test="${notification.pending == true}">
-                                                <a class="notification-link" onclick="acceptInvitation('${notification.id}')">Accept</a> - <a class="notification-link" onclick="declineInvitation('${notification.id}')">Decline</a>
-                                            </c:if>
-                                            <span class="date sub-text">
-                                        <p>${notification.formattedDate}</p>
-                                    </span>
-                                        </div>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-                        </div>
-                    </div>
-                    <div style="text-align: center; display: block" class="modal-footer">
-                <span id="clear-notifications" class="date sub-text">
-                 Clear all notifications
-                </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- !Main Content -->
     </main>
-    <!-- page-content" -->
+    <!-- !Main Wrapper -->
 </div>
-<!-- page-wrapper -->
-
 </body>
-<script src="<c:url value="/resources/scripts/main.js"/>"></script>
-<script src="<c:url value="/resources/scripts/tasks.js"/>"></script>
-<%--</script>--%>
+<script>
+
+    $("#task-due-date").datepicker({
+        orientation: "bottom auto",
+    });
+
+    function addTask(list) {
+        let task;
+        switch (list) {
+            case "backlog":
+                task = $('#new-backlog-task');
+                $.ajax({
+                    url: "/tasks/add?name=" + task.val() + "&list=" + list,
+                    success: function () {
+                        task.val('');
+                        $('#list-row').load(' #list-row > *');
+                    }
+                });
+                break;
+            case "todo":
+                task = $('#new-todo-task');
+                $.ajax({
+                    url: "/tasks/add?name=" + task.val() + "&list=" + list,
+                    success: function () {
+                        task.val('');
+                        $('#list-row').load(' #list-row > *');
+                    }
+                });
+                break;
+            case "inprogress":
+                task = $('#new-inprogress-task');
+                $.ajax({
+                    url: "/tasks/add?name=" + task.val() + "&list=" + list,
+                    success: function () {
+                        task.val('');
+                        $('#list-row').load(' #list-row > *');
+                    }
+                });
+                break;
+            case "complete":
+                task = $('#new-complete-task');
+                $.ajax({
+                    url: "/tasks/add?name=" + task.val() + "&list=" + list,
+                    success: function () {
+                        task.val('');
+                        $('#list-row').load(' #list-row > *');
+                    }
+                });
+                break;
+        }
+    }
+
+    function deleteTask(id) {
+        $.ajax({
+            url: "/tasks/delete?id=" + id,
+            success: function() {
+                $('#list-row').load(' #list-row > *');
+            }
+        })
+    }
+
+
+    function voteOnTask(id) {
+        $.ajax({
+            url: "/tasks/vote?id=" + id,
+            success: function () {
+                $('#list-row').load(' #list-row > *');
+            }
+        })
+    }
+
+    function unvoteTask(id) {
+        $.ajax({
+            url: "/tasks/unvote?id=" + id,
+            success: function () {
+                $('#list-row').load(' #list-row > *');
+            }
+        })
+    }
+
+    function setMoveTaskId(id) {
+        $(".ul-list").attr('spid', id);
+    }
+
+    $('#list-row').hover(function() {
+        var backlog, todo, inprogress, complete;
+
+        backlog = document.getElementById("backlog-list");
+        todo = document.getElementById("todo-list");
+        inprogress = document.getElementById("inprogress-list");
+        complete = document.getElementById("complete-list");
+
+        var sortable = Sortable.create(backlog, {
+            group: "lists",
+            animation: 300,
+            onEnd: function (evt) {
+                var id, from, to, pos;
+
+                id = $('.ul-list').attr('spid');
+                from = evt.from.id;
+                to = evt.to.id;
+                pos = evt.newIndex;
+
+                if (from === to) {
+                    movePosition(id, pos, to);
+                } else {
+                    moveTask(id, pos, to);
+                }
+            }
+        });
+        var sortable1 = Sortable.create(todo, {
+            group: "lists",
+            animation: 300,
+            onEnd: function (evt) {
+                var id, from, to, pos;
+
+                id = $('.ul-list').attr('spid');
+                from = evt.from.id;
+                to = evt.to.id;
+                pos = evt.newIndex;
+
+                if (from === to) {
+                    movePosition(id, pos, to);
+                }
+                else {
+                    moveTask(id, pos, to);
+                }
+            }
+        });
+        var sortable2 = Sortable.create(inprogress, {
+            group: "lists",
+            animation: 300,
+            onEnd: function (evt) {
+                var id, from, to, pos;
+
+                id = $('.ul-list').attr('spid');
+                from = evt.from.id;
+                to = evt.to.id;
+                pos = evt.newIndex;
+
+                if (from === to) {
+                    movePosition(id, pos, to);
+                }
+                else {
+                    moveTask(id, pos, to);
+                }
+            }
+        });
+        var sortable3 = Sortable.create(complete, {
+            group: "lists",
+            animation: 300,
+            onEnd: function (evt) {
+                var id, from, to, pos;
+
+                id = $('.ul-list').attr('spid');
+                from = evt.from.id;
+                to = evt.to.id;
+                pos = evt.newIndex;
+
+                if (from === to) {
+                    movePosition(id, pos, to);
+                }
+            }
+        });
+    });
+
+    function movePosition(id, pos, list) {
+        $.ajax({
+            url: "/tasks/position?id=" + id + "&position=" + pos + "&list=" + list,
+            success: function () {
+                $('#list-row').load(' #list-row > *');
+            }
+        })
+    }
+
+    function moveTask(id, pos, list) {
+        $.ajax({
+            url: "/tasks/move?id=" + id + "&position=" + pos + "&list=" + list,
+            success: function() {
+                $('#list-row').load(' #list-row > *');
+            }
+        })
+    }
+</script>
 </html>

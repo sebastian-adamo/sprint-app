@@ -31,12 +31,6 @@ public class Board {
     @OrderBy("position ASC")
     private List<Task> complete = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private User owner;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Poll> polls = new ArrayList<>();
-
     public Board() {}
 
     public Board(String name) {
@@ -135,21 +129,5 @@ public class Board {
 
     public void setComplete(List<Task> todo) {
         this.complete = complete;
-    }
-
-    public List<Poll> getPolls() {
-        return polls;
-    }
-
-    public void setPolls(List<Poll> polls) {
-        this.polls = polls;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
     }
 }

@@ -4,6 +4,11 @@ form {
 small {
     color: #676767;
 }
+
+.page-content {
+    overflow-x: visible !important;
+}
+
 .banner {
     align-content: center;
     text-align: center;
@@ -29,6 +34,11 @@ small {
     opacity: .9;
 }
 
+.card-footer {
+    border-top: none;
+    background-color: white;
+}
+
 .jumbotron {
     background-color: white !important;
 }
@@ -36,8 +46,8 @@ small {
 .close-modal {
     top: 10px !important;
     right: 10px !important;
-    width: 25px !important;
-    height: 25px !important;
+    width: 20px !important;
+    height: 20px !important;
     background-image: url("../../../resources/images/close-modal.svg") !important;
 }
 
@@ -105,6 +115,10 @@ hr {
     scrollbar-width: thin;
 }
 
+#task-modal {
+    max-width: 600px !important;
+}
+
 /*Lists*/
 /*Main Lists*/
 .grid {
@@ -151,7 +165,8 @@ hr {
     vertical-align: top;
     white-space: nowrap;
     box-shadow: rgba(0,0,0,0.1) 0 0 10px;
-    overflow: visible;
+    overflow: auto;
+    scrollbar-width: thin;
 }
 .list-header {
     display: block;
@@ -167,12 +182,14 @@ hr {
     overflow-y: auto;
     scrollbar-width: thin;
 }
+
 .ul-list {
     margin: 0;
     padding: 0;
     list-style-type: none;
     min-height: 2px;
 }
+
 .activity-wrapper {
     margin: 6px 12px 6px 12px;
     border-radius: 4px;
@@ -955,4 +972,74 @@ body {
 
 .chiller-theme .sidebar-footer>a:last-child {
     border-right: none;
+}
+
+/*Task Progress*/
+
+#task-progress-bar {
+    background-color: #66bb6a;
+}
+
+.round {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.round label {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 28px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 28px;
+}
+
+.round label:after {
+    border: 2px solid #fff;
+    border-top: none;
+    border-right: none;
+    content: "";
+    height: 6px;
+    left: 7px;
+    opacity: 0;
+    position: absolute;
+    top: 8px;
+    transform: rotate(-45deg);
+    width: 12px;
+}
+
+.round input[type="checkbox"] {
+    visibility: hidden;
+}
+
+.round input[type="checkbox"]:checked + label {
+    background-color: #66bb6a;
+    border-color: #66bb6a;
+}
+
+.round input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+}
+
+#task-overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+
+.datepicker-dropdown {
+    height: 200px !important;
+    width: 225px !important;
+    overflow: auto !important;
 }

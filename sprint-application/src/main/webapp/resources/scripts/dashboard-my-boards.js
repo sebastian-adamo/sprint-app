@@ -8,8 +8,11 @@ function createMyBoard() {
     if (name.val() !== '') {
         $.ajax({
             url: "/boards/addMyBoard?name=" + name.val() + "&description=" + description.val() + "&dod=" + dod.val(),
-            success: function(result) {
+            success: function() {
                 $('#content-container').load(' #my-boards-row > *');
+                name.val('');
+                description.val('');
+                dod.val('');
                 $('.close-modal').trigger('click');
             }
         })

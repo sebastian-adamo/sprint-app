@@ -18,13 +18,7 @@ public class MainController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private TeamRoleRepository boardRoleRepository;
-    @Autowired
     private BoardRepository boardRepository;
-
-    // For debugging
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_RESET = "\u001B[0m";
 
     @GetMapping("/")
     public String index() {
@@ -81,34 +75,13 @@ public class MainController {
             }
         }
 
+        Board board = boardRepository.findById(id).orElse(null);
+
         model.addAttribute("user", user);
-        model.addAttribute("board", boardRepository.findById(id));
+        model.addAttribute("board", board);
         model.addAttribute("notifications", notifications);
         model.addAttribute("notificationsLength", notificationsLength);
 
         return "tasks";
-    }
-
-    @GetMapping("/account")
-    public String account(Model model) {
-        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-
-        model.addAttribute("user", user);
-
-        // Notifications
-        List<Notification> notifications = new ArrayList<>(user.getNotifications());
-        notifications.sort(Comparator.comparing(Notification::getDatetime).reversed());
-        //Length
-        int notificationsLength = 0;
-        for (Notification notification : user.getNotifications()) {
-            if (!notification.isSeen()) {
-                notificationsLength++;
-            }
-        }
-
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("notificationsLength", notificationsLength);
-
-        return "account";
     }
 }

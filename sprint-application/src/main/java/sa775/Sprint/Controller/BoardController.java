@@ -24,7 +24,7 @@ public class BoardController {
     @Autowired
     private NotificationService notificationService;
 
-    //My Board Methods
+    // <-- My Board -->
     @GetMapping("/addMyBoard")
     public void addMyBoard(@RequestParam(value = "name") String name, @RequestParam(value = "description") String description, @RequestParam(value = "dod") String dod) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -45,12 +45,12 @@ public class BoardController {
 
         return returnMap;
     }
+    // <-- !My Board -->
 
     @GetMapping("/delete")
     public void delete(@RequestParam(value = "id") Long id) {
         boardRepository.deleteById(id);
     }
-    //!My Board Methods
 
     @GetMapping("/save")
     public void save(@RequestParam(value = "id") Long id, @RequestParam(value = "name") String name, @RequestParam(value = "description") String description, @RequestParam(value = "dod") String dod) {

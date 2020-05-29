@@ -1,10 +1,7 @@
 package sa775.Sprint.Domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class User {
@@ -26,14 +23,17 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Board> myBoards = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Board> recentBoards = new ArrayList<>();
+
     @OneToMany(mappedBy = "user")
     private Set<TeamRole> teamRoles = new HashSet<>();
 
     @ManyToMany(mappedBy = "users")
     private Set<Notification> notifications = new HashSet<>();
 
-    @ManyToMany(mappedBy = "voters")
-    private Set<Poll> polls = new HashSet<>();
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<Task> votedTasks = new HashSet<>();
 
     public User() {}
 
@@ -115,6 +115,14 @@ public class User {
         this.myBoards = myBoards;
     }
 
+    public List<Board> getRecentBoards() {
+        return recentBoards;
+    }
+
+    public void setRecentBoards(List<Board> recentBoards) {
+        this.recentBoards = recentBoards;
+    }
+
     public Set<TeamRole> getTeamRoles() {
         return teamRoles;
     }
@@ -131,12 +139,12 @@ public class User {
         this.notifications = notifications;
     }
 
-    public Set<Poll> getPolls() {
-        return polls;
+    public Set<Task> getVotedTasks() {
+        return votedTasks;
     }
 
-    public void setPolls(Set<Poll> polls) {
-        this.polls = polls;
+    public void setVotedTasks(Set<Task> votedTasks) {
+        this.votedTasks = votedTasks;
     }
 
 }

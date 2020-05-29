@@ -59,12 +59,12 @@ function removeUser(email) {
 
 // Sidebar functions
 function toggleSidebar() {
-    if($(".page-wrapper").hasClass("toggled") == false) {
+    if($(".page-wrapper").hasClass("toggled") === false) {
         $("#show-sidebar").click(function() {
             $(".page-wrapper").addClass("toggled");
         });
     }
-    else if ($(".page-wrapper").hasClass("toggled") == true) {
+    else if ($(".page-wrapper").hasClass("toggled") === true) {
         $("#show-sidebar").click(function() {
             $(".page-wrapper").removeClass("toggled");
         });
@@ -115,9 +115,6 @@ $(document).ready(function () {
     });
 });
 
-function clearNotifications() {
-
-}
 $(document).on('click','#clear-notifications', function(){
     $.ajax({
         url: "/notifications/clear",
