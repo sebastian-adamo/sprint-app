@@ -3,7 +3,8 @@ Sprint is an off-the-shelf Kanban board web application to assist users in workf
 
 # Installation
 Clone the project repository to your local environment and navigate to the 'sprint-application' directory.
-Launch the application using ./gradlew bootRun.
+
+Launch the application using 'gradle bootRun'.
 
 You must change the 'application.properties' file to match your local MySQL database.
 
