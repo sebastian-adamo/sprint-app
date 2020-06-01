@@ -8,24 +8,24 @@ public class TeamRoleId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long userId;
+    private int userId;
     private int teamId;
 
     public TeamRoleId() {
 
     }
 
-    public TeamRoleId(Long userId, int teamId) {
+    public TeamRoleId(int userId, int teamId) {
         super();
         this.userId = userId;
         this.teamId = teamId;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

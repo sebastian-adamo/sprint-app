@@ -48,12 +48,13 @@
     <!-- jQuery Modal -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 
+    <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
 
     <script src="<c:url value="/resources/scripts/main.js"/>"></script>
     <script src="<c:url value="/resources/scripts/dashboard-my-boards.js"/>"></script>
     <script src="<c:url value="/resources/scripts/dashboard-teams.js"/>"></script>
     <!-- Calendar File HERE -->
-    <script src="<c:url value="/resources/scripts/account.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/dashboard-settings.js"/>"></script>
 </head>
 <body>
 <div class="page-wrapper chiller-theme">
@@ -151,20 +152,11 @@
                 <li id="notifications-dropdown" class="nav-item dropdown">
                     <a class="nav-link" href="#" id="notifications" data-toggle="dropdown">
                         <i class="material-icons">notifications</i>
-                        <c:if test="${notificationsLength > 0}">
                             <span class="badge badge-pill badge-danger notification">
-                                    ${notificationsLength}
                             </span>
-                        </c:if>
                     </a>
                     <div style="width: 500px !important;" class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-header">Notifications</a>
-                        <c:forEach items="${notifications}" var="notification">
-                            <c:if test="${notification.seen == false}">
-                                <div class="dropdown-divider"></div>
-                                <a data-toggle="modal" data-target="#notification-modal" onmouseover="refreshNotification(${notification.id})" class="dropdown-item">${notification.description}</a>
-                            </c:if>
-                        </c:forEach>
                         <div class="dropdown-divider"></div>
                         <a data-toggle="modal" data-target="#notification-modal" class="dropdown-item">View all notifications</a>
                     </div>
@@ -251,7 +243,7 @@
                         <c:forEach items="${user.myBoards}" var="board">
                             <div class="module">
                                 <div style="width: 100%; height: 100%" class="card list-card boards-card">
-                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/tasks?id=${board.id}">
+                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/board?id=${board.id}">
                                         <div style="height: 75%; text-align: center; padding-top: 30%" class="card-body">
                                             <p class="card-text">${board.name}</p>
                                         </div>
@@ -336,8 +328,6 @@
                         <div class="tab-pane fade show active" id="team-boards" role="tabpanel" aria-labelledby="team-boards-tab">
                             <div style="padding-top: 2rem" id="team-boards-grid" class="grid">
                                 <!-- Team Boards Prepended Here -->
-                            </div>
-                            <div style="padding-top: 2rem" id="create-team-boards-grid" class="grid">
                                 <!-- Create Team Board -->
                                 <div class="module">
                                     <div style="width: 100%; height: 100%" class="card list-card boards-card">
@@ -361,9 +351,8 @@
                                     <input style="margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="team-name" class="form-control mb-4" readonly>
                                     <div style="margin-top: 8px;" class="form-group">
                                         <label for="team-description">Team description</label>
-                                        <textarea class="form-control rounded-0" id="team-description" rows="5" name="description" placeholder="Enter a description..."></textarea>
+                                        <textarea class="form-control rounded-0" id="team-description" rows="5" name="description" placeholder="Enter a description..." onfocusout="saveTeamDetails()"></textarea>
                                     </div>
-                                    <button style="background: #31353D; border-color: #31353D; margin-bottom: 2rem" class="btn btn-info btn-block" type="button" onclick="saveTeamDetails()">Save</button>
                                     <hr/>
                                     <button style="margin-top: 2rem" class="btn btn-info btn-block btn-danger" type="button" onclick="deleteTeam()">Delete Team</button>
                                 </form>
@@ -374,6 +363,16 @@
                         <!-- Team Members -->
                         <div class="tab-pane fade" id="team-members" role="tabpanel" aria-labelledby="team-members-tab" >
                             <div class="form-container">
+                                <!-- User Search -->
+                                <form class="form-inline d-flex md-form form-sm mt-0">
+                                    <i style="margin-left: 22.5%" class="fas fa-search" aria-hidden="true"></i>
+                                    <input id="user-search" class="form-control form-control-sm ml-3 w-50" type="text" placeholder="Search" aria-label="Search" onchange="searchUser()">
+                                </form>
+                                <ul id="user-search-result" style="list-style: none">
+
+                                </ul>
+                                <!-- !User Search -->
+                                <!-- User Table -->
                                 <table style="width: 80%; margin-left: 7.5%" class="table table-hover">
                                     <thead>
                                     <tr>
@@ -388,6 +387,7 @@
 
                                     </tbody>
                                 </table>
+                                <!-- !User Table -->
                             </div>
                         </div>
                         <!-- !Team Members -->
@@ -453,16 +453,15 @@
         <div style="width: 70%; height: 60%" id="edit-my-board-modal" class="modal">
             <form style="padding-top: 1rem !important;" id="edit-board-form" class="text-center p-5">
                 <label for="edit-my-board-name">Name</label>
-                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="edit-my-board-name" class="form-control mb-4" placeholder="Enter a name...">
+                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="edit-my-board-name" class="form-control mb-4" placeholder="Enter a name..." onfocusout="saveMyBoard()">
                 <div style="margin-top: 8px;" class="form-group">
                     <label for="edit-my-board-description">Description</label>
-                    <textarea class="form-control rounded-0" id="edit-my-board-description" rows="3" name="description" placeholder="Enter a description..."></textarea>
+                    <textarea class="form-control rounded-0" id="edit-my-board-description" rows="3" name="description" placeholder="Enter a description..." onfocusout="saveMyBoard()"></textarea>
                 </div>
                 <div style="margin-top: 8px;" class="form-group">
                     <label for="edit-my-board-dod">Definition of Done</label>
-                    <textarea class="form-control rounded-0" id="edit-my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
+                    <textarea class="form-control rounded-0" id="edit-my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..." onfocusout="saveMyBoard()"></textarea>
                 </div>
-                <button id="save-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="saveMyBoard()">Save</button>
             </form>
         </div>
         <!-- !Edit Board Modal -->
@@ -534,10 +533,12 @@
         $('#content-container').load(' #my-boards-row > *');
     }
 
+    function displayTeams() {
+        $('#content-container').load(' #teams-row > *');
+    }
 
     function displaySettings() {
         $('#content-container').load(' #settings-row > *');
     }
-
 </script>
 </html>

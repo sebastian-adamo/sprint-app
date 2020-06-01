@@ -8,7 +8,6 @@ import com.sprint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import com.sprint.service.NotificationService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,13 +25,11 @@ public class TaskController {
     private TaskRepository taskRepository;
     @Autowired
     private TodoRepository todoRepository;
-    @Autowired
-    private NotificationService notificationService;
 
     @GetMapping("/add")
     public void add(@RequestParam(value = "name") String name, @RequestParam(value = "list") String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
+        Board board = boardRepository.findById(user.getCurrentBoardId());
         assert board != null;
 
         switch (list) {
@@ -175,7 +172,7 @@ public class TaskController {
     @GetMapping("/position")
     public void movePosition(@RequestParam(value = "id") int id, @RequestParam(value = "position") int position, @RequestParam(value = "list") String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
+        Board board = boardRepository.findById(user.getCurrentBoardId());
         assert board != null;
         Task t = taskRepository.findById(id);
         switch(list) {
@@ -237,7 +234,7 @@ public class TaskController {
     @GetMapping("/move")
     public void moveTask(@RequestParam(value = "id") int id, @RequestParam(value = "position") int position, @RequestParam(value = "list") String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId()).orElse(null);
+        Board board = boardRepository.findById(user.getCurrentBoardId());
         assert board != null;
         // Copying contents of old task to new task and deleting old task
         Task t = taskRepository.findById(id);

@@ -8,7 +8,7 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String name;
     private String description;
     private String definitionOfDone;
@@ -43,11 +43,11 @@ public class Board {
         this.definitionOfDone = definitionOfDone;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

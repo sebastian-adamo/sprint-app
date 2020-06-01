@@ -8,7 +8,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     @Column(unique = true, nullable = false)
     private String username;
     @Column(unique = true, nullable = false)
@@ -18,7 +18,7 @@ public class User {
     private String fullname;
     private String company;
     private String bio;
-    private Long currentBoardId;
+    private int currentBoardId;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Board> myBoards = new ArrayList<>();
@@ -28,9 +28,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<TeamRole> teamRoles = new HashSet<>();
-
-    @ManyToMany(mappedBy = "users")
-    private Set<Notification> notifications = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Task> votedTasks = new HashSet<>();
@@ -43,11 +40,11 @@ public class User {
         this.password = password;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -99,11 +96,11 @@ public class User {
         this.bio = bio;
     }
 
-    public Long getCurrentBoardId() {
+    public int getCurrentBoardId() {
         return currentBoardId;
     }
 
-    public void setCurrentBoardId(Long currentBoardId) {
+    public void setCurrentBoardId(int currentBoardId) {
         this.currentBoardId = currentBoardId;
     }
 
@@ -129,14 +126,6 @@ public class User {
 
     public void setTeamRoles(Set<TeamRole> teamRoles) {
         this.teamRoles = teamRoles;
-    }
-
-    public Set<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(Set<Notification> notifications) {
-        this.notifications = notifications;
     }
 
     public Set<Task> getVotedTasks() {

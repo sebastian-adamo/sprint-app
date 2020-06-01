@@ -10,7 +10,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Tasks - Sprint</title>
+    <title>${board.name} - Sprint</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -57,6 +57,8 @@
             integrity="sha256-9D6DlNlpDfh0C8buQ6NXxrOdLo/wqFUwEB1s70obwfE="
             crossorigin="anonymous">
     </script>
+
+    <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
 
     <script src="<c:url value="/resources/scripts/main.js"/>"></script>
     <script src="<c:url value="/resources/scripts/tasks-task-overlay.js"/>"></script>
@@ -157,20 +159,13 @@
                 <li id="notifications-dropdown" class="nav-item dropdown">
                     <a class="nav-link" href="#" id="notifications" data-toggle="dropdown">
                         <i class="material-icons">notifications</i>
-                        <c:if test="${notificationsLength > 0}">
                             <span class="badge badge-pill badge-danger notification">
-                                    ${notificationsLength}
                             </span>
-                        </c:if>
                     </a>
                     <div style="width: 500px !important;" class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-header">Notifications</a>
-                        <c:forEach items="${notifications}" var="notification">
-                            <c:if test="${notification.seen == false}">
                                 <div class="dropdown-divider"></div>
                                 <a data-toggle="modal" data-target="#notification-modal" onmouseover="refreshNotification(${notification.id})" class="dropdown-item">${notification.description}</a>
-                            </c:if>
-                        </c:forEach>
                         <div class="dropdown-divider"></div>
                         <a data-toggle="modal" data-target="#notification-modal" class="dropdown-item">View all notifications</a>
                     </div>
@@ -204,7 +199,7 @@
                 <div style="height: 750px" class="col-lg-3">
                     <div style="padding-bottom: 0; margin-bottom: 0; padding-top: 0;" class="jumbotron jumbotron-fluid">
                         <div class="container">
-                            <h1 style="text-align: center" class="display-4">Backlog</h1>
+                            <h1 class="display-4">Backlog</h1>
                         </div>
                         <div class="lists">
                             <ul id="backlog-list" class="ul-list">
@@ -248,7 +243,7 @@
                 <!-- TODO List -->
                 <div style="height: 750px" class="col-lg-3">
                     <div class="container">
-                        <h1 style="text-align: center" class="display-4">TODO</h1>
+                        <h1 class="display-4">TODO</h1>
                     </div>
                     <div class="lists">
                         <ul id="todo-list" class="ul-list">
@@ -291,7 +286,7 @@
                 <!-- In Progress List -->
                 <div style="height: 750px" class="col-lg-3">
                     <div class="container">
-                        <h1 style="text-align: center" class="display-4">In Progress</h1>
+                        <h1 class="display-4">In Progress</h1>
                     </div>
                     <div class="lists">
                         <ul id="inprogress-list" class="ul-list">
@@ -334,7 +329,7 @@
                 <!-- Complete List -->
                 <div style="height: 750px" class="col-lg-3">
                     <div class="container">
-                        <h1 style="text-align: center" class="display-4">Complete</h1>
+                        <h1 class="display-4">Complete</h1>
                     </div>
                     <div class="lists">
                         <ul id="complete-list" class="ul-list">

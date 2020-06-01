@@ -33,8 +33,8 @@ public class TeamController {
     @Autowired
     private TeamRoleRepository teamRoleRepository;
 
-    @GetMapping("/create")
-    public void create(@RequestParam("name") String name, @RequestParam("description") String description) {
+    @GetMapping("/add")
+    public void add(@RequestParam String name, @RequestParam String description) {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Team team = new Team(name, description);
         team.setCreator(user);
@@ -48,55 +48,30 @@ public class TeamController {
 
     @Transactional
     @GetMapping("/delete")
-    public void delete(@RequestParam("id") int id) {
+    public void delete(@RequestParam int id) {
         teamRoleRepository.deleteAllByTeamId(id);
     }
 
-    @GetMapping("/getBoards")
-    public List<Board> getBoards(@RequestParam("id") int id) {
-        Team team = teamRepository.findById(id).orElse(null);
-        assert team != null;
-        return team.getBoards();
-    }
-
-    @GetMapping("/createBoard")
-    public void createBoard(@RequestParam("id") int id, @RequestParam("name") String name, @RequestParam("description") String description, @RequestParam("dod") String dod) {
-        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Team team = teamRepository.findById(id).orElse(null);
-        Board board = new Board(name, description, dod);
-        boardRepository.save(board);
-        assert team != null;
-        team.getBoards().add(board);
-        teamRepository.save(team);
-    }
-
-    @GetMapping("/deleteBoard")
-    public void deleteBoard(@RequestParam("id") Long id) {
-        boardRepository.deleteById(id);
-    }
-
-    @GetMapping("/getDetails")
-    public HashMap<String, Object> getDetails(@RequestParam("id") int id) {
-        Team team = teamRepository.findById(id).orElse(null);
+    @GetMapping("/get")
+    public HashMap<String, Object> get(@RequestParam int id) {
+        Team team = teamRepository.findById(id);
         HashMap<String, Object> returnMap = new HashMap<>();
-        assert team != null;
         returnMap.put("name", team.getName());
         returnMap.put("description", team.getDescription());
 
         return returnMap;
     }
 
-    @GetMapping("/saveDetails")
-    public void saveDetails(@RequestParam("id") int id, @RequestParam("name") String name, @RequestParam("description") String description) {
-        Team team = teamRepository.findById(id).orElse(null);
-        assert team != null;
+    @GetMapping("/update")
+    public void update(@RequestParam int id, @RequestParam String name, @RequestParam String description) {
+        Team team = teamRepository.findById(id);
         team.setName(name);
         team.setDescription(description);
         teamRepository.save(team);
     }
 
-    @GetMapping("/getMembers")
-    public List<HashMap<String,Object>> getMembers(@RequestParam("id") int id) {
+    @GetMapping("/members")
+    public List<HashMap<String,Object>> members(@RequestParam int id) {
         List<HashMap<String,Object>> returnList = new ArrayList<>();
 
         for (TeamRole teamRole : teamRoleRepository.findAllByTeamId(id)) {
@@ -114,4 +89,47 @@ public class TeamController {
 
         return returnList;
     }
+
+
+    @GetMapping("/search")
+    public String search(@RequestParam String email) {
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return user.getEmail();
+            }
+        }
+
+        return "";
+    }
+
+    @GetMapping("/invite")
+    public void invite(@RequestParam int id, @RequestParam String email) {
+        // Currently just adds the user instead of inviting them
+        Team team = teamRepository.findById(id);
+        User user = userRepository.findByEmail(email);
+
+        TeamRole teamRole = new TeamRole(user, team, "Developer");
+        user.getTeamRoles().add(teamRole);
+        team.getTeamRoles().add(teamRole);
+        teamRoleRepository.save(teamRole);
+
+    }
+
+    // Boards
+    @GetMapping("/board/getAll")
+    public List<Board> boardGet(@RequestParam int id) {
+        return teamRepository.findById(id).getBoards();
+    }
+
+    @GetMapping("/board/add")
+    public void boardAdd(@RequestParam int id, @RequestParam String name, @RequestParam String description, @RequestParam String dod) {
+        Team team = teamRepository.findById(id);
+        Board board = new Board(name, description, dod);
+        boardRepository.save(board);
+        team.getBoards().add(board);
+        teamRepository.save(team);
+    }
+    // !Boards
 }

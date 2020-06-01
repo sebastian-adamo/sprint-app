@@ -6,7 +6,7 @@ function saveDetails() {
     bio = $("#account-bio").val();
 
     $.ajax({
-        url: "/account/save?fullname=" + fullname + "&company=" + company + "&bio=" + bio,
+        url: "/user/update/details?fullname=" + fullname + "&company=" + company + "&bio=" + bio,
     });
 
     tippy('#save-account-details', {
@@ -27,8 +27,8 @@ function savePassword() {
     else {
         if(newPassword === confirmPassword) {
             $.ajax({
-                url: "/account/password?new=" + newPassword,
-                success: function(result) {
+                url: "/user/update/password?newPassword=" + newPassword,
+                success: function() {
                     alert("Password has been updated")
                 }
             })

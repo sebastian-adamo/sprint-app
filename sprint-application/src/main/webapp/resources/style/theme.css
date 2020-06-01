@@ -5,6 +5,21 @@ small {
     color: #676767;
 }
 
+.container > h1 {
+    font-family: 'Permanent Marker', cursive; !important;
+}
+input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; !important;
+}
+textarea {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; !important;
+}
+
+.container > h1 {
+    text-align: center;
+    color: #818896;
+}
+
 .page-content {
     overflow-x: visible !important;
 }

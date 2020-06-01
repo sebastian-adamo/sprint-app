@@ -81,6 +81,7 @@ public class Task {
 
     public int getProgress() {
         this.progress = 0;
+
         for (Todo todo : this.getTodos()) {
             if (todo.isComplete()) {
                 this.progress += (100 / this.getTodos().size());
