@@ -3,7 +3,7 @@ let currentTaskId;
 function getTaskDetails(id) {
     currentTaskId = id;
     $.ajax({
-        url: "/tasks/get?id=" + id,
+        url: "/task/get?id=" + id,
         success: function(result) {
             $('#task-name').val(result.name);
             $('#task-description').val(result.description);
@@ -24,7 +24,7 @@ function saveTaskName() {
     let name = $('#task-name').val();
 
     $.ajax({
-        url: "/tasks/saveName?id=" + currentTaskId + "&name=" + name,
+        url: "/task/updateName?id=" + currentTaskId + "&name=" + name,
         success: function() {
             $('#list-row').load(' #list-row > *');
         }
@@ -35,7 +35,7 @@ function saveTaskDescription() {
     let description = $('#task-description').val();
 
     $.ajax({
-        url: "/tasks/saveDescription?id=" + currentTaskId + "&description=" + description,
+        url: "/task/updateDescription?id=" + currentTaskId + "&description=" + description,
         success: function() {
             $('#list-row').load(' #list-row > *');
         }
@@ -44,7 +44,7 @@ function saveTaskDescription() {
 
 function updateDod() {
     $.ajax({
-        url: "/tasks/updateDod?id=" + currentTaskId,
+        url: "/task/updateDod?id=" + currentTaskId,
     })
 }
 
@@ -52,7 +52,7 @@ function setTaskDueDate() {
     let due = $('#task-due-date').val();
 
     $.ajax({
-        url: "/tasks/setDue?id=" + currentTaskId + '&due=' + due,
+        url: "/task/updateDue?id=" + currentTaskId + '&due=' + due,
         success: function() {
             $('#list-row').load(' #list-row > *');
         }
@@ -61,7 +61,7 @@ function setTaskDueDate() {
 
 function getTaskProgress() {
     $.ajax({
-        url: "/tasks/getProgress?id=" + currentTaskId,
+        url: "/task/getProgress?id=" + currentTaskId,
         success: function(result) {
             document.getElementById("task-progress-bar").textContent = result + "%";
             document.getElementById("task-progress-bar").setAttribute("style", "width: " + result + "%");
@@ -70,7 +70,7 @@ function getTaskProgress() {
     });
 
     $.ajax({
-        url: "/tasks/getTodos?id=" + currentTaskId,
+        url: "/todo/getAll?id=" + currentTaskId,
         success: function(result) {
             $('#task-todo-list').empty();
             for (let i = 0; i < result.length; i++) {
@@ -98,7 +98,7 @@ function getTaskProgress() {
 
 function updateTodo(id) {
     $.ajax({
-        url: "/tasks/updateTodo?id=" + id,
+        url: "/todo/update?id=" + id,
         success: function() {
             getTaskProgress();
             $('#list-row').load(' #list-row > *');
@@ -110,7 +110,7 @@ function addTaskTodo() {
     let todo = $('#new-task-todo').val();
     if (todo !== '') {
         $.ajax({
-            url: "/tasks/addTodo?id=" + currentTaskId + '&description=' + todo,
+            url: "/todo/add?id=" + currentTaskId + '&description=' + todo,
             success: function() {
                 $('#new-task-todo').val('');
                 getTaskProgress();
@@ -122,7 +122,7 @@ function addTaskTodo() {
 
 function getTaskActivity() {
     $.ajax({
-        url: "/tasks/getActivity?id=" + currentTaskId,
+        url: "/comment/getAll?id=" + currentTaskId,
         success: function(result) {
             $('#task-comment-list').empty();
             for (let i = 0; i < result.length; i++) {
@@ -150,10 +150,8 @@ function getTaskActivity() {
 function addTaskComment() {
     let description = $('#task-activity-comment').val();
 
-    console.log(description);
-
     $.ajax({
-        url: "/tasks/addComment?id=" + currentTaskId + "&description=" + description,
+        url: "/comment/add?id=" + currentTaskId + "&description=" + description,
         success: function(result) {
             $('#task-activity-comment').val('');
             $('#task-comment-list').prepend(

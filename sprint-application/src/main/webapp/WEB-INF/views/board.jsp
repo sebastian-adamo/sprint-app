@@ -58,10 +58,8 @@
             crossorigin="anonymous">
     </script>
 
-    <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
-
     <script src="<c:url value="/resources/scripts/main.js"/>"></script>
-    <script src="<c:url value="/resources/scripts/tasks-task-overlay.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/board-task-overlay.js"/>"></script>
 </head>
 <body>
 <div class="page-wrapper chiller-theme">
@@ -217,7 +215,7 @@
                                             <div class="card-footer">
                                                 <c:choose>
                                                     <c:when test="${task.usersVoted.contains(user)}">
-                                                        <i class="material-icons" style="color: #66bb6a; float: left;" onclick="unvoteTask('${task.id}')">thumb_up</i>
+                                                        <i class="material-icons" style="color: #66bb6a; float: left;" onclick="voteOnTask('${task.id}')">thumb_up</i>
                                                         <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
                                                     </c:when>
                                                     <c:otherwise>
@@ -261,7 +259,7 @@
                                         <div class="card-footer">
                                             <c:choose>
                                                 <c:when test="${task.usersVoted.contains(user)}">
-                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="unvoteTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="voteOnTask('${task.id}')">thumb_up</i>
                                                     <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
                                                 </c:when>
                                                 <c:otherwise>
@@ -304,7 +302,7 @@
                                         <div class="card-footer">
                                             <c:choose>
                                                 <c:when test="${task.usersVoted.contains(user)}">
-                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="unvoteTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="voteOnTask('${task.id}')">thumb_up</i>
                                                     <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
                                                 </c:when>
                                                 <c:otherwise>
@@ -347,7 +345,7 @@
                                         <div class="card-footer">
                                             <c:choose>
                                                 <c:when test="${task.usersVoted.contains(user)}">
-                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="unvoteTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="voteOnTask('${task.id}')">thumb_up</i>
                                                     <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
                                                 </c:when>
                                                 <c:otherwise>
@@ -470,7 +468,7 @@
             case "backlog":
                 task = $('#new-backlog-task');
                 $.ajax({
-                    url: "/tasks/add?name=" + task.val() + "&list=" + list,
+                    url: "/task/add?name=" + task.val() + "&list=" + list,
                     success: function () {
                         task.val('');
                         $('#list-row').load(' #list-row > *');
@@ -480,7 +478,7 @@
             case "todo":
                 task = $('#new-todo-task');
                 $.ajax({
-                    url: "/tasks/add?name=" + task.val() + "&list=" + list,
+                    url: "/task/add?name=" + task.val() + "&list=" + list,
                     success: function () {
                         task.val('');
                         $('#list-row').load(' #list-row > *');
@@ -490,7 +488,7 @@
             case "inprogress":
                 task = $('#new-inprogress-task');
                 $.ajax({
-                    url: "/tasks/add?name=" + task.val() + "&list=" + list,
+                    url: "/task/add?name=" + task.val() + "&list=" + list,
                     success: function () {
                         task.val('');
                         $('#list-row').load(' #list-row > *');
@@ -500,7 +498,7 @@
             case "complete":
                 task = $('#new-complete-task');
                 $.ajax({
-                    url: "/tasks/add?name=" + task.val() + "&list=" + list,
+                    url: "/task/add?name=" + task.val() + "&list=" + list,
                     success: function () {
                         task.val('');
                         $('#list-row').load(' #list-row > *');
@@ -512,7 +510,7 @@
 
     function deleteTask(id) {
         $.ajax({
-            url: "/tasks/delete?id=" + id,
+            url: "/task/delete?id=" + id,
             success: function() {
                 $('#list-row').load(' #list-row > *');
             }
@@ -522,16 +520,7 @@
 
     function voteOnTask(id) {
         $.ajax({
-            url: "/tasks/vote?id=" + id,
-            success: function () {
-                $('#list-row').load(' #list-row > *');
-            }
-        })
-    }
-
-    function unvoteTask(id) {
-        $.ajax({
-            url: "/tasks/unvote?id=" + id,
+            url: "/task/vote?id=" + id,
             success: function () {
                 $('#list-row').load(' #list-row > *');
             }
@@ -626,7 +615,7 @@
 
     function movePosition(id, pos, list) {
         $.ajax({
-            url: "/tasks/position?id=" + id + "&position=" + pos + "&list=" + list,
+            url: "/task/updatePosition?id=" + id + "&position=" + pos + "&list=" + list,
             success: function () {
                 $('#list-row').load(' #list-row > *');
             }
@@ -635,7 +624,7 @@
 
     function moveTask(id, pos, list) {
         $.ajax({
-            url: "/tasks/move?id=" + id + "&position=" + pos + "&list=" + list,
+            url: "/task/updateList?id=" + id + "&position=" + pos + "&list=" + list,
             success: function() {
                 $('#list-row').load(' #list-row > *');
             }
