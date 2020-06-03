@@ -249,8 +249,8 @@
                                         </div>
                                     </a>
                                     <div class="card-footer">
-                                        <a class="material-icons" style="text-decoration: none; color: black" href="#edit-my-board-modal" rel="modal:open" onclick="getMyBoard('${board.id}')"><i class="material-icons">create</i></a>
-                                        <i class="material-icons" onclick="deleteMyBoard('${board.id}')">delete</i>
+                                        <a class="material-icons" style="text-decoration: none; color: black" href="#edit-my-board-modal" rel="modal:open" onclick="getMyBoard('${board.id}')" data-toggle="tooltip" data-placement="bottom" title="Edit Details"><i class="material-icons">create</i></a>
+                                        <i class="material-icons" onclick="deleteMyBoard('${board.id}')" data-toggle="tooltip" data-placement="bottom" title="Delete">delete</i>
                                     </div>
                                 </div>
                             </div>

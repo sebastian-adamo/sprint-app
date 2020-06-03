@@ -35,6 +35,11 @@ public class MainController {
         return "register";
     }
 
+    @GetMapping("/recovery")
+    public String recovery() {
+        return "recovery";
+    }
+
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());

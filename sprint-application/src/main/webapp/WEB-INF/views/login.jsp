@@ -58,6 +58,7 @@
 
                     <div class="register-account">
                         <a href="${pageContext.request.contextPath}/register"><p>No account? Sign up for an account</p></a>
+                        <a href="${pageContext.request.contextPath}/recovery"><p>Recover Password</p></a>
                     </div>
                 </form>
             </div>
