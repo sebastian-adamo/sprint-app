@@ -118,11 +118,6 @@ public class TeamController {
     }
 
     // Boards
-    @GetMapping("/board/getAll")
-    public List<Board> boardGet(@RequestParam int id) {
-        return teamRepository.findById(id).getBoards();
-    }
-
     @GetMapping("/board/add")
     public void boardAdd(@RequestParam int id, @RequestParam String name, @RequestParam String description, @RequestParam String dod) {
         Team team = teamRepository.findById(id);

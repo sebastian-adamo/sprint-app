@@ -1,8 +1,10 @@
 package com.sprint.controller;
 
 import com.sprint.domain.Board;
+import com.sprint.domain.Team;
 import com.sprint.domain.User;
 import com.sprint.repository.BoardRepository;
+import com.sprint.repository.TeamRepository;
 import com.sprint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,8 @@ public class BoardController {
     private UserRepository userRepository;
     @Autowired
     private BoardRepository boardRepository;
+    @Autowired
+    private TeamRepository teamRepository;
 
     @GetMapping("/add")
     public void add(@RequestParam String name, @RequestParam String description, @RequestParam String dod) {
@@ -37,6 +41,11 @@ public class BoardController {
         returnMap.put("dod", board.getDefinitionOfDone());
 
         return returnMap;
+    }
+
+    @GetMapping("/getAll")
+    public List<Board> getAll(@RequestParam int id) {
+        return teamRepository.findById(id).getBoards();
     }
 
     @GetMapping("/delete")

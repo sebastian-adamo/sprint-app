@@ -113,7 +113,7 @@ function inviteUser(email) {
 // Team Boards
 function getTeamBoards() {
     $.ajax({
-        url: "/team/board/getAll?id=" + teamId,
+        url: "/board/getAll?id=" + teamId,
         success: function(result) {
             $('#team-boards-grid').empty();
             for (let i = 0; i < result.length; i++) {
