@@ -24,55 +24,6 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    @GetMapping("/add")
-    public void add(@RequestParam String name, @RequestParam String list) {
-        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Board board = boardRepository.findById(user.getCurrentBoardId());
-
-        switch (list) {
-            case "backlog":
-                Task task = new Task(name, board.getBacklog().size()+1);
-                board.addBacklog(task);
-                break;
-            case "todo":
-                Task task1 = new Task(name, board.getTodo().size()+1);
-                board.addTodo(task1);
-                break;
-            case "inprogress":
-                Task task2 = new Task(name, board.getInprogress().size()+1);
-                board.addInprogress(task2);
-                break;
-            case "complete":
-                Task task3 = new Task(name, board.getComplete().size()+1);
-                board.addComplete(task3);
-                break;
-        }
-        boardRepository.save(board);
-    }
-
-    @GetMapping("/delete")
-    public void delete(@RequestParam int id) {
-        taskRepository.deleteById(id);
-    }
-
-    @GetMapping("/vote")
-    public void vote(@RequestParam int id) {
-        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Task task = taskRepository.findById(id);
-
-        if (task.getUsersVoted().contains(user)) {
-            task.getUsersVoted().remove(user);
-            user.getVotedTasks().remove(task);
-        }
-        else {
-            task.getUsersVoted().add(user);
-            user.getVotedTasks().add(task);
-        }
-        userRepository.save(user);
-    }
-
-
-    // Sort
     @GetMapping("/get")
     public HashMap<String, Object> get(@RequestParam int id) {
         Task task = taskRepository.findById(id);
@@ -96,37 +47,23 @@ public class TaskController {
         return taskRepository.findById(id).getProgress();
     }
 
-
-    @GetMapping("/updateName")
-    public void updateName(@RequestParam int id, @RequestParam String name) {
-        Task t = taskRepository.findById(id);
-        t.setName(name);
-        taskRepository.save(t);
-    }
-
-    @GetMapping("/updateDescription")
-    public void updateDescription(@RequestParam int id, @RequestParam String description) {
-        Task t = taskRepository.findById(id);
-        t.setDescription(description);
-        taskRepository.save(t);
-    }
-
-    @GetMapping("/updateDod")
-    public void updateDod(@RequestParam int id) {
+    @PutMapping("/vote")
+    public void vote(@RequestParam int id) {
+        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Task task = taskRepository.findById(id);
-        task.setDefinitionOfDone(!task.isDefinitionOfDone());
-        taskRepository.save(task);
+
+        if (task.getUsersVoted().contains(user)) {
+            task.getUsersVoted().remove(user);
+            user.getVotedTasks().remove(task);
+        }
+        else {
+            task.getUsersVoted().add(user);
+            user.getVotedTasks().add(task);
+        }
+        userRepository.save(user);
     }
 
-    @GetMapping("/updateDue")
-    public void updateDue(@RequestParam int id, @RequestParam String due) throws ParseException {
-        Task task = taskRepository.findById(id);
-        Date date = new SimpleDateFormat("MM/dd/yyyy").parse(due);
-        task.setDue(date);
-        taskRepository.save(task);
-    }
-
-    @GetMapping("/updatePosition")
+    @PutMapping("/updatePosition")
     public void updatePosition(@RequestParam int id, @RequestParam int position, @RequestParam String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Board board = boardRepository.findById(user.getCurrentBoardId());
@@ -189,6 +126,67 @@ public class TaskController {
         taskRepository.save(task);
     }
 
+    @PutMapping("/updateName")
+    public void updateName(@RequestParam int id, @RequestParam String name) {
+        Task t = taskRepository.findById(id);
+        t.setName(name);
+        taskRepository.save(t);
+    }
+
+    @PutMapping("/updateDescription")
+    public void updateDescription(@RequestParam int id, @RequestParam String description) {
+        Task t = taskRepository.findById(id);
+        t.setDescription(description);
+        taskRepository.save(t);
+    }
+
+    @PutMapping("/updateDod")
+    public void updateDod(@RequestParam int id) {
+        Task task = taskRepository.findById(id);
+        task.setDefinitionOfDone(!task.isDefinitionOfDone());
+        taskRepository.save(task);
+    }
+
+    @PutMapping("/updateDue")
+    public void updateDue(@RequestParam int id, @RequestParam String due) throws ParseException {
+        Task task = taskRepository.findById(id);
+        Date date = new SimpleDateFormat("MM/dd/yyyy").parse(due);
+        task.setDue(date);
+        taskRepository.save(task);
+    }
+
+    @PostMapping("/add")
+    public void add(@RequestParam String name, @RequestParam String list) {
+        User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Board board = boardRepository.findById(user.getCurrentBoardId());
+
+        switch (list) {
+            case "backlog":
+                Task task = new Task(name, board.getBacklog().size()+1);
+                board.addBacklog(task);
+                break;
+            case "todo":
+                Task task1 = new Task(name, board.getTodo().size()+1);
+                board.addTodo(task1);
+                break;
+            case "inprogress":
+                Task task2 = new Task(name, board.getInprogress().size()+1);
+                board.addInprogress(task2);
+                break;
+            case "complete":
+                Task task3 = new Task(name, board.getComplete().size()+1);
+                board.addComplete(task3);
+                break;
+        }
+        boardRepository.save(board);
+    }
+
+    @DeleteMapping("/delete")
+    public void delete(@RequestParam int id) {
+        taskRepository.deleteById(id);
+    }
+
+    //TODO
     @GetMapping("/updateList")
     public void updateList(@RequestParam int id, @RequestParam int position, @RequestParam String list) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -258,6 +256,5 @@ public class TaskController {
                 break;
         }
         boardRepository.save(board);
-
     }
 }

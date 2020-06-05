@@ -51,10 +51,10 @@
     <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
 
     <script src="<c:url value="/resources/scripts/main.js"/>"></script>
-    <script src="<c:url value="/resources/scripts/dashboard-my-boards.js"/>"></script>
-    <script src="<c:url value="/resources/scripts/dashboard-teams.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/dashboard_my-boards.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/dashboard_teams.js"/>"></script>
     <!-- Calendar File HERE -->
-    <script src="<c:url value="/resources/scripts/dashboard-settings.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/dashboard_user-settings.js"/>"></script>
 </head>
 <body>
 <div class="page-wrapper chiller-theme">
@@ -453,14 +453,14 @@
         <div style="width: 70%; height: 60%" id="edit-my-board-modal" class="modal">
             <form style="padding-top: 1rem !important;" id="edit-board-form" class="text-center p-5">
                 <label for="edit-my-board-name">Name</label>
-                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="edit-my-board-name" class="form-control mb-4" placeholder="Enter a name..." onfocusout="saveMyBoard()">
+                <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="edit-my-board-name" class="form-control mb-4" placeholder="Enter a name..." onfocusout="updateMyBoard()">
                 <div style="margin-top: 8px;" class="form-group">
                     <label for="edit-my-board-description">Description</label>
-                    <textarea class="form-control rounded-0" id="edit-my-board-description" rows="3" name="description" placeholder="Enter a description..." onfocusout="saveMyBoard()"></textarea>
+                    <textarea class="form-control rounded-0" id="edit-my-board-description" rows="3" name="description" placeholder="Enter a description..." onfocusout="updateMyBoard()"></textarea>
                 </div>
                 <div style="margin-top: 8px;" class="form-group">
                     <label for="edit-my-board-dod">Definition of Done</label>
-                    <textarea class="form-control rounded-0" id="edit-my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..." onfocusout="saveMyBoard()"></textarea>
+                    <textarea class="form-control rounded-0" id="edit-my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..." onfocusout="updateMyBoard()"></textarea>
                 </div>
             </form>
         </div>
@@ -481,7 +481,7 @@
                     <label for="my-board-dod">Definition of Done</label>
                     <textarea class="form-control rounded-0" id="my-board-dod" rows="3" name="dod" placeholder="Enter a definition of done..."></textarea>
                 </div>
-                <button id="create-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="createMyBoard()">Create</button>
+                <button id="create-my-board" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="addMyBoard()">Create</button>
             </form>
         </div>
         <!-- !My Board Modal -->

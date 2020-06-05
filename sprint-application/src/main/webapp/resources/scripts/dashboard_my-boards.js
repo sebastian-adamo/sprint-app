@@ -1,4 +1,4 @@
-function createMyBoard() {
+function addMyBoard() {
     var name, description, dod;
 
     name = $('#my-board-name');
@@ -6,7 +6,7 @@ function createMyBoard() {
     dod = $('#my-board-dod');
 
     if (name.val() !== '') {
-        $.ajax({
+        $.post({
             url: "/board/add?name=" + name.val() + "&description=" + description.val() + "&dod=" + dod.val(),
             success: function() {
                 $('#content-container').load(' #my-boards-row > *');
@@ -35,7 +35,7 @@ function getMyBoard(id) {
     })
 }
 
-function saveMyBoard() {
+function updateMyBoard() {
     let id, name, description, dod;
 
     id = $('#my-board-id').val();
@@ -46,6 +46,7 @@ function saveMyBoard() {
     if (name !== '') {
         $.ajax({
             url: "/board/update?id= " + id + "&name=" + name + "&description=" + description + "&dod=" + dod,
+            type: 'PUT',
             success: function() {
                 $('#content-container').load(' #my-boards-row > *');
             }
@@ -56,6 +57,7 @@ function saveMyBoard() {
 function deleteMyBoard(id) {
     $.ajax({
         url: "/board/delete?id=" + id,
+        type: 'DELETE',
         success: function() {
             $('#content-container').load(' #my-boards-row > *');
         }

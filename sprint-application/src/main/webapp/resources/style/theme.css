@@ -1048,3 +1048,12 @@ body {
     width: 225px !important;
     overflow: auto !important;
 }
+
+.comment-edit {
+    text-decoration: underline;
+}
+
+.comment-edit:hover {
+    cursor: pointer;
+    opacity: .9;
+}

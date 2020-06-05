@@ -15,7 +15,7 @@ function createTeam() {
 
 
     if (name !== '') {
-        $.ajax({
+        $.post({
             url: "/team/add?name=" + name.val() + "&description=" + description.val(),
             success: function() {
                 $('#content-container').load(' #teams-row > *');
@@ -31,6 +31,7 @@ function createTeam() {
 function deleteTeam() {
     $.ajax({
         url: "/team/delete?id=" + teamId ,
+        type: 'DELETE',
         success: function() {
             $('#content-container').load(' #teams-row > *');
         }
@@ -45,6 +46,7 @@ function saveTeamDetails() {
 
     $.ajax({
         url: "/team/update?id=" + teamId + "&name=" + name + "&description=" + description,
+        type: 'PUT',
     })
 }
 
@@ -99,7 +101,7 @@ function searchUser() {
 }
 
 function inviteUser(email) {
-    $.ajax({
+    $.post({
         url: "/team/invite?id=" + teamId + "&email=" + email,
         success: function() {
             $('#user-search').empty();

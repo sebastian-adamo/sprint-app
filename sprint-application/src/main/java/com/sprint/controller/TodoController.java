@@ -5,10 +5,7 @@ import com.sprint.domain.Todo;
 import com.sprint.repository.TaskRepository;
 import com.sprint.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,14 +19,6 @@ public class TodoController {
     @Autowired
     private TodoRepository todoRepository;
 
-    @GetMapping("/add")
-    public void add(@RequestParam int id, @RequestParam String description) {
-        Task task = taskRepository.findById(id);
-        Todo todo = new Todo(description);
-        task.getTodos().add(todo);
-        taskRepository.save(task);
-    }
-
     @GetMapping("/getAll")
     public List<Todo> getAll(@RequestParam int id) {
         Task task = taskRepository.findById(id);
@@ -37,11 +26,19 @@ public class TodoController {
         return task.getTodos();
     }
 
-    @GetMapping("/update")
+    @PutMapping("/update")
     public void update(@RequestParam int id) {
         Todo todo = todoRepository.findById(id);
         todo.setComplete(!todo.isComplete());
         todoRepository.save(todo);
+    }
+
+    @PostMapping("/add")
+    public void add(@RequestParam int id, @RequestParam String description) {
+        Task task = taskRepository.findById(id);
+        Todo todo = new Todo(description);
+        task.getTodos().add(todo);
+        taskRepository.save(task);
     }
 
     //DELETE

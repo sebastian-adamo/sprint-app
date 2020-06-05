@@ -6,10 +6,7 @@ import com.sprint.domain.TeamRole;
 import com.sprint.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.sprint.repository.BoardRepository;
 import com.sprint.repository.TeamRepository;
 import com.sprint.repository.TeamRoleRepository;
@@ -33,25 +30,6 @@ public class TeamController {
     @Autowired
     private TeamRoleRepository teamRoleRepository;
 
-    @GetMapping("/add")
-    public void add(@RequestParam String name, @RequestParam String description) {
-        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        Team team = new Team(name, description);
-        team.setCreator(user);
-        teamRepository.save(team);
-
-        TeamRole teamRole = new TeamRole(user, team, "Product Owner");
-        team.getTeamRoles().add(teamRole);
-        user.getTeamRoles().add(teamRole);
-        teamRoleRepository.save(teamRole);
-    }
-
-    @Transactional
-    @GetMapping("/delete")
-    public void delete(@RequestParam int id) {
-        teamRoleRepository.deleteAllByTeamId(id);
-    }
-
     @GetMapping("/get")
     public HashMap<String, Object> get(@RequestParam int id) {
         Team team = teamRepository.findById(id);
@@ -60,14 +38,6 @@ public class TeamController {
         returnMap.put("description", team.getDescription());
 
         return returnMap;
-    }
-
-    @GetMapping("/update")
-    public void update(@RequestParam int id, @RequestParam String name, @RequestParam String description) {
-        Team team = teamRepository.findById(id);
-        team.setName(name);
-        team.setDescription(description);
-        teamRepository.save(team);
     }
 
     @GetMapping("/members")
@@ -90,7 +60,6 @@ public class TeamController {
         return returnList;
     }
 
-
     @GetMapping("/search")
     public String search(@RequestParam String email) {
         List<User> users = userRepository.findAll();
@@ -104,7 +73,28 @@ public class TeamController {
         return "";
     }
 
-    @GetMapping("/invite")
+    @PutMapping("/update")
+    public void update(@RequestParam int id, @RequestParam String name, @RequestParam String description) {
+        Team team = teamRepository.findById(id);
+        team.setName(name);
+        team.setDescription(description);
+        teamRepository.save(team);
+    }
+
+    @PostMapping("/add")
+    public void add(@RequestParam String name, @RequestParam String description) {
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Team team = new Team(name, description);
+        team.setCreator(user);
+        teamRepository.save(team);
+
+        TeamRole teamRole = new TeamRole(user, team, "Product Owner");
+        team.getTeamRoles().add(teamRole);
+        user.getTeamRoles().add(teamRole);
+        teamRoleRepository.save(teamRole);
+    }
+
+    @PostMapping("/invite")
     public void invite(@RequestParam int id, @RequestParam String email) {
         // Currently just adds the user instead of inviting them
         Team team = teamRepository.findById(id);
@@ -115,6 +105,12 @@ public class TeamController {
         team.getTeamRoles().add(teamRole);
         teamRoleRepository.save(teamRole);
 
+    }
+
+    @Transactional
+    @DeleteMapping("/delete")
+    public void delete(@RequestParam int id) {
+        teamRoleRepository.deleteAllByTeamId(id);
     }
 
     // Boards

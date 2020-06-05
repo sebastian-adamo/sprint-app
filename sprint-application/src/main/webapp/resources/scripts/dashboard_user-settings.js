@@ -7,6 +7,10 @@ function saveDetails() {
 
     $.ajax({
         url: "/user/update/details?fullname=" + fullname + "&company=" + company + "&bio=" + bio,
+        type: 'PUT',
+        success: function() {
+            alert("Details have been updated")
+        }
     });
 
     tippy('#save-account-details', {
@@ -21,12 +25,15 @@ function savePassword() {
     newPassword = $("#account-new-password").val();
     confirmPassword = $("#account-confirm-password").val();
 
-    if(newPassword || confirmPassword === '') {
+    if(newPassword === '') {
+        alert("Password fields cannot be empty")
+    }
+    else if (confirmPassword === '') {
         alert("Password fields cannot be empty")
     }
     else {
         if(newPassword === confirmPassword) {
-            $.ajax({
+            $.post({
                 url: "/user/update/password?newPassword=" + newPassword,
                 success: function() {
                     alert("Password has been updated")

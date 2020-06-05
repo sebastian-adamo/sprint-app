@@ -14,7 +14,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/update/details")
+    @PutMapping("/update/details")
     public void updateDetails(@RequestParam String fullname, @RequestParam String company, @RequestParam String bio) {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         user.setFullname(fullname);
@@ -23,7 +23,7 @@ public class UserController {
         userRepository.save(user);
     }
 
-    @GetMapping("/update/password")
+    @PostMapping("/update/password")
     public void updatePassword(@RequestParam String newPassword) {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         String encodedNew = new BCryptPasswordEncoder().encode(newPassword);

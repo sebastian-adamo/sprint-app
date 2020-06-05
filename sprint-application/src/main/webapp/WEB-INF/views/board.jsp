@@ -59,7 +59,9 @@
     </script>
 
     <script src="<c:url value="/resources/scripts/main.js"/>"></script>
-    <script src="<c:url value="/resources/scripts/board-task-overlay.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/board_task-details.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/board_task-progress.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/board_task-activity.js"/>"></script>
 </head>
 <body>
 <div class="page-wrapper chiller-theme">
@@ -215,11 +217,11 @@
                                             <div class="card-footer">
                                                 <c:choose>
                                                     <c:when test="${task.usersVoted.contains(user)}">
-                                                        <i class="material-icons" style="color: #66bb6a; float: left;" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                        <i class="material-icons" style="color: #66bb6a; float: left;" onclick="updateVote('${task.id}')">thumb_up</i>
                                                         <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <i class="material-icons" style="float: left" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                        <i class="material-icons" style="float: left" onclick="updateVote('${task.id}')">thumb_up</i>
                                                     </c:otherwise>
                                                 </c:choose>
                                                 <i class="material-icons" style="float: right"  onclick="deleteTask('${task.id}')">delete</i>
@@ -259,11 +261,11 @@
                                         <div class="card-footer">
                                             <c:choose>
                                                 <c:when test="${task.usersVoted.contains(user)}">
-                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="updateVote('${task.id}')">thumb_up</i>
                                                     <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <i class="material-icons" style="float: left" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="float: left" onclick="updateVote('${task.id}')">thumb_up</i>
                                                 </c:otherwise>
                                             </c:choose>
                                             <i class="material-icons" style="float: right" onclick="deleteTask('${task.id}')">delete</i>
@@ -302,11 +304,11 @@
                                         <div class="card-footer">
                                             <c:choose>
                                                 <c:when test="${task.usersVoted.contains(user)}">
-                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="updateVote('${task.id}')">thumb_up</i>
                                                     <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <i class="material-icons" style="float: left" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="float: left" onclick="updateVote('${task.id}')">thumb_up</i>
                                                 </c:otherwise>
                                             </c:choose>
                                             <i class="material-icons" style="float: right" onclick="deleteTask('${task.id}')">delete</i>
@@ -345,11 +347,11 @@
                                         <div class="card-footer">
                                             <c:choose>
                                                 <c:when test="${task.usersVoted.contains(user)}">
-                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="color: #66bb6a; float: left;" onclick="updateVote('${task.id}')">thumb_up</i>
                                                     <span class="date sub-text" style="float: left; margin-left: 0.5rem; font-size: 16px">${fn:length(task.usersVoted)}</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <i class="material-icons" style="float: left" onclick="voteOnTask('${task.id}')">thumb_up</i>
+                                                    <i class="material-icons" style="float: left" onclick="updateVote('${task.id}')">thumb_up</i>
                                                 </c:otherwise>
                                             </c:choose>
                                             <i class="material-icons" style="float: right"  onclick="deleteTask('${task.id}')">delete</i>
@@ -387,19 +389,19 @@
                             <div class="form-container">
                                 <form style="padding-top: 1rem !important;" id="task-details-form" class="text-center p-5">
                                     <label for="task-name">Name</label>
-                                    <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="task-name" class="form-control mb-4" onfocusout="saveTaskName()" placeholder="Enter a name...">
+                                    <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="task-name" class="form-control mb-4" onfocusout="updateTaskName()" placeholder="Enter a name...">
                                     <div style="margin-top: 8px;" class="form-group">
                                         <label for="task-description">Description</label>
-                                        <textarea class="form-control rounded-0" id="task-description" rows="3" name="description" placeholder="Enter a description..." onfocusout="saveTaskDescription()"></textarea>
+                                        <textarea class="form-control rounded-0" id="task-description" rows="3" name="description" placeholder="Enter a description..." onfocusout="updateTaskDescription()"></textarea>
                                     </div>
                                     <div class="round">
                                         <input type="checkbox" id="task-dod"/>
-                                        <label onclick="updateDod()" for="task-dod"></label>
+                                        <label onclick="updateTaskDoD()" for="task-dod"></label>
                                         <span style="float: left; margin-left: 2.5rem; padding-top: 3px">Definition of Done</span>
                                     </div>
                                     <label for="task-due-date">Due Date</label>
                                     <div class="input-append date form_datetime">
-                                        <input id="task-due-date" style="width: 70%; margin-left: 15%" class="form-control" name="date" placeholder="Enter a due date..." type="text" onchange="setTaskDueDate()"/>
+                                        <input id="task-due-date" style="width: 70%; margin-left: 15%" class="form-control" name="date" placeholder="Enter a due date..." type="text" onchange="updateTaskDueDate()"/>
                                     </div>
                                 </form>
                             </div>
@@ -458,6 +460,8 @@
 </body>
 <script>
 
+    let currentTaskId;
+
     $("#task-due-date").datepicker({
         orientation: "bottom auto",
     });
@@ -467,7 +471,7 @@
         switch (list) {
             case "backlog":
                 task = $('#new-backlog-task');
-                $.ajax({
+                $.post({
                     url: "/task/add?name=" + task.val() + "&list=" + list,
                     success: function () {
                         task.val('');
@@ -477,7 +481,7 @@
                 break;
             case "todo":
                 task = $('#new-todo-task');
-                $.ajax({
+                $.post({
                     url: "/task/add?name=" + task.val() + "&list=" + list,
                     success: function () {
                         task.val('');
@@ -487,7 +491,7 @@
                 break;
             case "inprogress":
                 task = $('#new-inprogress-task');
-                $.ajax({
+                $.post({
                     url: "/task/add?name=" + task.val() + "&list=" + list,
                     success: function () {
                         task.val('');
@@ -497,7 +501,7 @@
                 break;
             case "complete":
                 task = $('#new-complete-task');
-                $.ajax({
+                $.post({
                     url: "/task/add?name=" + task.val() + "&list=" + list,
                     success: function () {
                         task.val('');
@@ -511,16 +515,17 @@
     function deleteTask(id) {
         $.ajax({
             url: "/task/delete?id=" + id,
+            type: 'DELETE',
             success: function() {
                 $('#list-row').load(' #list-row > *');
             }
         })
     }
 
-
-    function voteOnTask(id) {
+    function updateVote(id) {
         $.ajax({
             url: "/task/vote?id=" + id,
+            type: 'PUT',
             success: function () {
                 $('#list-row').load(' #list-row > *');
             }
@@ -551,9 +556,9 @@
                 pos = evt.newIndex;
 
                 if (from === to) {
-                    movePosition(id, pos, to);
+                    updatePosition(id, pos, to);
                 } else {
-                    moveTask(id, pos, to);
+                    updateList(id, pos, to);
                 }
             }
         });
@@ -569,10 +574,10 @@
                 pos = evt.newIndex;
 
                 if (from === to) {
-                    movePosition(id, pos, to);
+                    updatePosition(id, pos, to);
                 }
                 else {
-                    moveTask(id, pos, to);
+                    updateList(id, pos, to);
                 }
             }
         });
@@ -588,10 +593,10 @@
                 pos = evt.newIndex;
 
                 if (from === to) {
-                    movePosition(id, pos, to);
+                    updatePosition(id, pos, to);
                 }
                 else {
-                    moveTask(id, pos, to);
+                    updateList(id, pos, to);
                 }
             }
         });
@@ -607,22 +612,23 @@
                 pos = evt.newIndex;
 
                 if (from === to) {
-                    movePosition(id, pos, to);
+                    updatePosition(id, pos, to);
                 }
             }
         });
     });
 
-    function movePosition(id, pos, list) {
+    function updatePosition(id, pos, list) {
         $.ajax({
             url: "/task/updatePosition?id=" + id + "&position=" + pos + "&list=" + list,
+            type: 'PUT',
             success: function () {
                 $('#list-row').load(' #list-row > *');
             }
         })
     }
 
-    function moveTask(id, pos, list) {
+    function updateList(id, pos, list) {
         $.ajax({
             url: "/task/updateList?id=" + id + "&position=" + pos + "&list=" + list,
             success: function() {

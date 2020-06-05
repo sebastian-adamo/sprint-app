@@ -1,7 +1,6 @@
 package com.sprint.controller;
 
 import com.sprint.domain.Board;
-import com.sprint.domain.Team;
 import com.sprint.domain.User;
 import com.sprint.repository.BoardRepository;
 import com.sprint.repository.TeamRepository;
@@ -23,7 +22,7 @@ public class BoardController {
     @Autowired
     private TeamRepository teamRepository;
 
-    @GetMapping("/add")
+    @PostMapping("/add")
     public void add(@RequestParam String name, @RequestParam String description, @RequestParam String dod) {
         User user =  userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Board board = new Board(name, description, dod);
@@ -48,18 +47,17 @@ public class BoardController {
         return teamRepository.findById(id).getBoards();
     }
 
-    @GetMapping("/delete")
+    @PutMapping("/update")
+    public void update(@RequestParam int id, @RequestParam String name, @RequestParam String description, @RequestParam String dod) {
+        Board board = boardRepository.findById(id);
+        board.setName(name);
+        board.setDescription(description);
+        board.setDefinitionOfDone(dod);
+        boardRepository.save(board);
+    }
+
+    @DeleteMapping("/delete")
     public void delete(@RequestParam int id) {
         boardRepository.deleteById(id);
     }
-
-    @GetMapping("/update")
-    public void update(@RequestParam int id, @RequestParam String name, @RequestParam String description, @RequestParam String dod) {
-        Board b = boardRepository.findById(id);
-        b.setName(name);
-        b.setDescription(description);
-        b.setDefinitionOfDone(dod);
-        boardRepository.save(b);
-    }
-
 }
