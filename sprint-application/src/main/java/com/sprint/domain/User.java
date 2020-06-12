@@ -15,7 +15,7 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
-    private String fullname;
+    private String name;
     private String company;
     private String bio;
     private int currentBoardId;
@@ -72,12 +72,12 @@ public class User {
         this.password = password;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getName() {
+        return name;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setName(String fullname) {
+        this.name = fullname;
     }
 
     public String getCompany() {
@@ -118,6 +118,13 @@ public class User {
 
     public void setRecentBoards(List<Board> recentBoards) {
         this.recentBoards = recentBoards;
+    }
+
+    public void addRecentBoard(Board board) {
+        if (recentBoards.size() > 4) {
+            recentBoards.remove(4);
+        }
+        recentBoards.add(0, board);
     }
 
     public Set<TeamRole> getTeamRoles() {

@@ -243,7 +243,7 @@
                         <c:forEach items="${user.myBoards}" var="board">
                             <div class="module">
                                 <div style="width: 100%; height: 100%" class="card list-card boards-card">
-                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" href="${pageContext.request.contextPath}/board?id=${board.id}">
+                                    <a style="text-decoration: none; color: #0f0f0f; display: block; height: 100%" onclick="updateRecent('${board.id}')" href="${pageContext.request.contextPath}/board?id=${board.id}">
                                         <div style="height: 75%; text-align: center; padding-top: 30%" class="card-body">
                                             <p class="card-text">${board.name}</p>
                                         </div>
@@ -414,29 +414,47 @@
                                 <form id="account-form" class="text-center p-5">
                                     <label for="account-username">Username</label>
                                     <input style=" margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="account-username" class="form-control mb-4" value="${user.username}" readonly>
-                                    <label for="account-email">Email</label>
-                                    <input style="margin-bottom: 10px !important; margin-top: 8px;" type="text" id="account-email" class="form-control mb-4" name="email" value="${user.email}" placeholder="Enter an email address..." readonly>
-                                    <label for="account-fullname">Full Name</label>
-                                    <input style="margin-bottom: 10px !important; margin-top: 8px;" type="text" id="account-fullname" name="fullname" class="form-control mb-4" value="${user.fullname}" placeholder="Enter your full name...">
+                                    <label for="account-name">Name</label>
+                                    <input style="margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="text" id="account-name" name="name" class="form-control mb-4" value="${user.name}" placeholder="Enter your name..." onfocusout="updateName()">
                                     <label for="account-company">Company</label>
-                                    <input style="margin-bottom: 10px !important; margin-top: 8px;" type="text" id="account-company" name="company" class="form-control mb-4" value="${user.company}" placeholder="Enter your company name...">
+                                    <input style="margin-bottom: 10px !important; margin-top: 8px;" type="text" id="account-company" name="company" class="form-control mb-4" value="${user.company}" placeholder="Enter your company name..." onfocusout="updateCompany()">
                                     <div style="margin-top: 8px;" class="form-group">
                                         <label for="account-bio">Bio</label>
-                                        <textarea class="form-control rounded-0" id="account-bio" rows="3" name="bio" placeholder="Enter a bio...">${user.bio}</textarea>
+                                        <textarea class="form-control rounded-0" id="account-bio" rows="3" name="bio" placeholder="Enter a bio..." onfocusout="updateBio()">${user.bio}</textarea>
                                     </div>
-                                    <button id="save-account-details" style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="saveDetails()">Save</button>
                                 </form>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab" >
                             <div class="form-container">
-                                <form class="text-center p-5">
-                                    <label for="account-new-password">New Password</label>
-                                    <input style="margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="password" id="account-new-password" class="form-control mb-4" placeholder="Enter new password...">
-                                    <label for="account-confirm-password">Confirm Password</label>
-                                    <input style="margin-bottom: 14px !important; margin-top: 8px;" type="password" id="account-confirm-password" class="form-control mb-4" placeholder="Confirm password...">
-                                    <button style="background: #31353D; border-color: #31353D;" class="btn btn-info btn-block" type="button" onclick="savePassword()">Save</button>
-                                </form>
+                                <div class="change-container" id="change-email">
+                                    <div id="change-email-text">
+                                        <span class="change-text" onclick="$('#change-email').load(' #change-email-form > *')">Change Email?</span>
+                                    </div>
+                                    <div style="display: none" id="change-email-form">
+                                        <form class="text-center p-5">
+                                            <label for="account-email">Email</label>
+                                            <input style="margin-bottom: 10px !important; margin-top: 8px; width: 350px" type="text" id="account-email" class="form-control mb-4" name="email" value="${user.email}" placeholder="Enter an email address..." readonly>
+                                            <button id="login-button" class="btn btn-info btn-block" type="button">Change</button>
+                                            <button style="margin-top: 1rem" class="btn btn-info btn-block btn-danger" type="button" onclick="$('#change-email').load(' #change-email-text > *')">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="change-container" id="change-password">
+                                    <div id="change-password-text">
+                                        <span class="change-text" onclick="$('#change-password').load(' #change-password-form > *')">Change Password?</span>
+                                    </div>
+                                    <div style="display: none;" id="change-password-form">
+                                        <form class="text-center p-5">
+                                            <label for="account-new-password">New Password</label>
+                                            <input style="margin-bottom: 10px !important; margin-top: 8px; width: 350px;" type="password" id="account-new-password" class="form-control mb-4" placeholder="Enter new password...">
+                                            <label for="account-confirm-password">Confirm Password</label>
+                                            <input style="margin-bottom: 14px !important; margin-top: 8px;" type="password" id="account-confirm-password" class="form-control mb-4" placeholder="Confirm password...">
+                                            <button id="login-button" class="btn btn-info btn-block" type="button" onclick="savePassword()">Save</button>
+                                            <button style="margin-top: 1rem" class="btn btn-info btn-block btn-danger" type="button" onclick="$('#change-password').load(' #change-password-text > *')">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

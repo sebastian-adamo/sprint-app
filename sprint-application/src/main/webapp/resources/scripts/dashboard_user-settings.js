@@ -1,21 +1,27 @@
-function saveDetails() {
-    let fullname, company, bio;
-
-    fullname = $("#account-fullname").val();
-    company = $("#account-company").val();
-    bio = $("#account-bio").val();
+function updateName() {
+    let name = $("#account-name").val();
 
     $.ajax({
-        url: "/user/update/details?fullname=" + fullname + "&company=" + company + "&bio=" + bio,
+        url: "/user/updateName?name=" + name,
         type: 'PUT',
-        success: function() {
-            alert("Details have been updated")
-        }
     });
+}
 
-    tippy('#save-account-details', {
-        content: "Details Saved!",
-        trigger: 'click',
+function updateCompany() {
+    let company = $("#account-company").val();
+
+    $.ajax({
+        url: "/user/updateCompany?company=" + company,
+        type: 'PUT',
+    });
+}
+
+function updateBio() {
+    let bio = $("#account-bio").val();
+
+    $.ajax({
+        url: "/user/updateBio?bio=" + bio,
+        type: 'PUT',
     });
 }
 
@@ -36,7 +42,8 @@ function savePassword() {
             $.post({
                 url: "/user/update/password?newPassword=" + newPassword,
                 success: function() {
-                    alert("Password has been updated")
+                    $('#change-password').load(' #change-password-text');
+                    alert("Password has been updated");
                 }
             })
         }

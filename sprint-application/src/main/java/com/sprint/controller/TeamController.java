@@ -46,11 +46,11 @@ public class TeamController {
 
         for (TeamRole teamRole : teamRoleRepository.findAllByTeamId(id)) {
             HashMap<String, Object> map = new HashMap<String, Object>();
-            if(teamRole.getUser().getFullname() == null) {
+            if(teamRole.getUser().getName() == null) {
                 map.put("name", "");
             }
             else {
-                map.put("name", teamRole.getUser().getFullname());
+                map.put("name", teamRole.getUser().getName());
             }
             map.put("username", teamRole.getUser().getUsername());
             map.put("role", teamRole.getRole());

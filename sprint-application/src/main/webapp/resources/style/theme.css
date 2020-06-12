@@ -1057,3 +1057,15 @@ body {
     cursor: pointer;
     opacity: .9;
 }
+
+.change-container {
+    padding-top: 1rem;
+}
+
+.change-text {
+    text-decoration: underline;
+}
+
+.change-text:hover {
+    cursor: pointer;
+}

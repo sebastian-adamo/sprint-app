@@ -1,6 +1,8 @@
 package com.sprint.controller;
 
+import com.sprint.domain.Board;
 import com.sprint.domain.User;
+import com.sprint.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,16 +15,41 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BoardRepository boardRepository;
 
-    @PutMapping("/update/details")
-    public void updateDetails(@RequestParam String fullname, @RequestParam String company, @RequestParam String bio) {
+    @PutMapping("/updateName")
+    public void updateName(@RequestParam String name) {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        user.setFullname(fullname);
+        user.setName(name);
+        userRepository.save(user);
+    }
+
+    @PutMapping("/updateCompany")
+    public void updateCompany(@RequestParam String company) {
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         user.setCompany(company);
+        userRepository.save(user);
+    }
+
+    @PutMapping("/updateBio")
+    public void updateBio(@RequestParam String bio) {
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         user.setBio(bio);
         userRepository.save(user);
     }
 
+    @PutMapping("/updateRecent")
+    public void updateRecent(@RequestParam int id) {
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Board board = boardRepository.findById(id);
+        if (!user.getRecentBoards().contains(board)) {
+            user.addRecentBoard(board);
+            userRepository.save(user);
+        }
+    }
+
+    // PASSWORD AND EMAIL
     @PostMapping("/update/password")
     public void updatePassword(@RequestParam String newPassword) {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());

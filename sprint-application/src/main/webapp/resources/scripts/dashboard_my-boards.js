@@ -63,3 +63,10 @@ function deleteMyBoard(id) {
         }
     })
 }
+
+function updateRecent(id) {
+    $.ajax({
+        url: "/user/updateRecent?id=" + id,
+        type: 'PUT',
+    })
+}
