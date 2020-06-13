@@ -1,6 +1,8 @@
 language: java
 install: skip
 
+os: linux
+dist: trusty
 jdk: openjdk8
 
 script:
