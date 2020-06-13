@@ -51,13 +51,13 @@ public class TaskControllerTests {
         assertEquals(test.get("name"), "Testing");
     }
 
-    @Test
-    public void testVote() {
-        User user = new User("admin", "admin@sprint.com", "admin");
-        task.getUsersVoted().add(user);
-        when(taskRepository.findById(1)).thenReturn(task);
-
-        taskController.vote(1);
-//        assertEquals(taskController.get, "Testing");
-    }
+//    @Test
+//    public void testVote() {
+//        User user = new User("admin", "admin@sprint.com", "admin");
+//        task.getUsersVoted().add(user);
+//        when(taskRepository.findById(1)).thenReturn(task);
+//
+//        taskController.vote(1);
+////        assertEquals(taskController.get, "Testing");
+//    }
 }
