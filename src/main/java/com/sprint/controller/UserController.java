@@ -48,13 +48,12 @@ public class UserController {
             userRepository.save(user);
         }
     }
-
-    // PASSWORD AND EMAIL
-    @PostMapping("/update/password")
-    public void updatePassword(@RequestParam String newPassword) {
-        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        String encodedNew = new BCryptPasswordEncoder().encode(newPassword);
-        user.setPassword(encodedNew);
-        userRepository.save(user);
-    }
+//
+//    @PostMapping("/updatePassword")
+//    public String updatePassword(@RequestParam String password) {
+//        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//        String encoded = new BCryptPasswordEncoder().encode(password);
+//        user.setPassword(encoded);
+//        userRepository.save(user);
+//    }
 }

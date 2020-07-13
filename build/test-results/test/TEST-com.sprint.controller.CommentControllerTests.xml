@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sprint.controller.CommentControllerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-14T19:33:55" hostname="DESKTOP-5KVQQ8B" time="0.459">
+  <properties/>
+  <testcase name="testGetAll" classname="com.sprint.controller.CommentControllerTests" time="0.459"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
